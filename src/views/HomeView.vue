@@ -11,5 +11,7 @@ const viewType = ref('all')
 </script>
 
 <template>
-
+  <div class="nav-bar"></div>
+  
+  <h2 style="font-size: xx-large;">Projects</h2>
 </template>
