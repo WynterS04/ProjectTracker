@@ -3,15 +3,9 @@ import { RouterLink, RouterView } from 'vue-router'
 import { ref } from 'vue'
 </script>
 
-<template>
+<template> <!--BCBS Intern Project Tracker-->
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-      </nav>
-    </div>
+    <h1>BCBS Intern Project Tracker</h1>
   </header>
 
   <RouterView />
