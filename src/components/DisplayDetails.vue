@@ -10,8 +10,8 @@ const  details = ref([
 </script>
 
 <template>
-      <div class="all-projects">
-    <table v-show="viewType === 'all'" class="project-table">
+    <div class="all-projects">
+        <table class="project-table">
             <tr>
                 <th>Name</th>
                 <th>Owner</th>

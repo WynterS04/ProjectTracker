@@ -14,4 +14,12 @@ const viewType = ref('all')
   <div class="nav-bar"></div>
   
   <h2 style="font-size: xx-large;">Projects</h2>
+
+  <button @click="viewType = 'all'">All</button>
+  <button @click="viewType = 'summary'">Summary</button>
+
+  <DisplayDetails v-if="viewType === 'all'"></DisplayDetails>
+
+  <SummaryDisplay v-if="viewType === 'summary'"></SummaryDisplay>
+
 </template>
