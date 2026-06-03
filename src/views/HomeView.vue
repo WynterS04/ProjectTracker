@@ -1,7 +1,7 @@
 <script setup>
 import  { ref } from 'vue'
 import DisplayDetails from '@/components/DisplayDetails.vue'
-import DisplaySummary from '@/components/SummaryDisplay.vue'
+import DisplaySummary from '@/components/DisplaySummary.vue'
 import ProjectForm from '@/components/ProjectForm.vue'
 import Search from '@/components/Search.vue'
 import StatusFiltering from '@/components/StatusFiltering.vue'
@@ -19,6 +19,7 @@ const viewType = ref('all')
   <button @click="viewType = 'summary'">Summary</button>
 
   <DisplayDetails v-if="viewType === 'all'"></DisplayDetails>
+  <ProjectForm></ProjectForm>
 
   <SummaryDisplay v-if="viewType === 'summary'"></SummaryDisplay>
 
