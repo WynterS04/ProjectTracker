@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 const  statuses = ref([
     { status: 'Not Started', color: 'grey', total: 3},
-    { status: 'In-Progress', color: 'orange', total: 4},
+    { status: 'In Progress', color: 'orange', total: 4},
     { status: 'Completed', color: 'green', total: 2}
 ])
 
