@@ -1,10 +1,39 @@
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { reactive } from 'vue'
 import { useProjectStore } from '@/stores/ProjectStore'
-import { Project } from '@/stores/ProjectStore'
+import type { Project } from '@/stores/ProjectStore'
+
+const emit = defineEmits(['project-submitted'])
 
 const store = useProjectStore()
-let  newProject = Project
+
+const add = reactive({
+    projectName: '',
+    owner: '',
+    date: '',
+    status: 'Not Started',
+    description: ''
+})
+
+let id: number = 0
+
+const onSubmit = () => {
+    const newProject: Project = {
+        id: id++,
+        project: add.projectName,
+        owner: add.owner,
+        date: add.date,
+        status: "Not Started",
+        description: add.description
+    }
+    emit('project-submitted', newProject)
+
+    projectName: ''
+    owner: ''
+    date: ''
+    status: 'Not Started'
+    description: ''
+}
 
 </script>
 
@@ -12,18 +41,18 @@ let  newProject = Project
     <div class="page-wrapper">
         <div class="project-form-container">
             <h1>New Project</h1>
-            <form class="project-form">
+            <form class="project-form" @submit.prevent="onSubmit">
                 <label for="name">Project Name<span style="color: black;">&#8277;</span></label>
-                <input id="name" placeholder="Project XYZ" required>
+                <input v-model="add.projectName" id="name" placeholder="Project XYZ" required>
                 
                 <label for="owner">Owner<span style="color: black;">&#8277;</span></label>
-                <input id="owner" placeholder="John Doe" required>
+                <input v-model="add.owner" id="owner" placeholder="John Doe" required>
 
                 <label for="date">Due Date<span style="color: black;">&#8277;</span></label>
-                <input id="date" type="date" required>
+                <input v-model="add.date"  id="date" type="date" required>
 
                 <label for="status">Status<span style="color: black;">&#8277;</span></label>
-                <select id="status" required>
+                <select v-model="add.status" id="status" required>
                     <option> </option>
                     <option>Not Started</option>
                     <option>In Progress</option>
@@ -31,7 +60,7 @@ let  newProject = Project
                 </select>
 
                 <label for="description">Description<span style="color: black;">&#8277;</span></label>
-                <textarea id="description" placeholder="Enter project overview" rows="5" required></textarea>
+                <textarea v-model="add.description" id="description" placeholder="Enter project overview" rows="5" required></textarea>
 
                 <div class="button-wrapper">
                     <input class="button" type="submit" value="Add Project"> <!--@click="store.addProject(newProject)"-->
