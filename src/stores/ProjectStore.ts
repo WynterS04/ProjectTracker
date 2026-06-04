@@ -11,7 +11,6 @@ owner: string
 status: ProjectStatus 
 date: string 
 description: string
-
 }
 
 export const useProjectStore = defineStore('project', {
@@ -41,17 +40,22 @@ export const useProjectStore = defineStore('project', {
             }
             const summary: number[] = [state.projects.length, totalNotStarted, totalInProgress, totalCompleted]
             return summary
+        },
+        searchProjects(state) {
+
         }
     },
     actions: {
         addProject(newProject: Project) {
             this.projects.push(newProject)
         },
-        deleteProject(project: Project) {
-
+        deleteProject(oldProject: Project) {
+            let index = this.projects.findIndex(p => p.id === oldProject.id)
+            this.projects.splice(index, 1)
         },
-        updateProject(project: Project) {
-
+        updateProject(updatedProject: Project) {
+            let index = this.projects.findIndex(p => p.id === updatedProject.id)
+            this.projects[index] = updatedProject
         }
     }
 })

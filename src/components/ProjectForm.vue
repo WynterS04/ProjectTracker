@@ -1,5 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { useProjectStore } from '@/stores/ProjectStore'
+import { Project } from '@/stores/ProjectStore'
+
+const store = useProjectStore()
+let  newProject = Project
 
 </script>
 
@@ -29,7 +34,7 @@ import { ref } from 'vue'
                 <textarea id="description" placeholder="Enter project overview" rows="5" required></textarea>
 
                 <div class="button-wrapper">
-                    <input class="button" type="submit" value="Add Project">
+                    <input class="button" type="submit" value="Add Project"> <!--@click="store.addProject(newProject)"-->
                 </div>
             </form>
         </div>
