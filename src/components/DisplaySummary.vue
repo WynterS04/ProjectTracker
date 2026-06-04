@@ -1,5 +1,9 @@
 <script setup>
 import { ref } from 'vue'
+import { useProjectStore } from '@/stores/ProjectStore';
+
+const store = useProjectStore()
+
 
 const  statuses = ref([
     { status: 'Not Started', color: 'grey', total: 3},
@@ -11,7 +15,7 @@ const  statuses = ref([
 
 <template>
     <div class="project-summary">
-        <h2>Overview</h2>
+        <h2>Summary</h2>
         <div 
         v-for="status in statuses"
         :key="status.id"

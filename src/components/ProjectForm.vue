@@ -2,6 +2,7 @@
 import { reactive } from 'vue'
 import { useProjectStore } from '@/stores/ProjectStore'
 import type { Project } from '@/stores/ProjectStore'
+import type { ProjectStatus } from '@/stores/ProjectStore'
 
 const emit = defineEmits(['project-submitted'])
 
@@ -11,7 +12,7 @@ const add = reactive({
     projectName: '',
     owner: '',
     date: '',
-    status: 'Not Started',
+    status: 'Not Started' as ProjectStatus,
     description: ''
 })
 
@@ -23,16 +24,18 @@ const onSubmit = () => {
         project: add.projectName,
         owner: add.owner,
         date: add.date,
-        status: "Not Started",
+        status: add.status,
         description: add.description
     }
+    store.addProject(newProject)
+
     emit('project-submitted', newProject)
 
-    projectName: ''
-    owner: ''
-    date: ''
-    status: 'Not Started'
-    description: ''
+    add.projectName = ''
+    add.owner = ''
+    add.date = ''
+    add.status = 'Not Started' as ProjectStatus
+    add.description = ''
 }
 
 </script>
@@ -63,12 +66,12 @@ const onSubmit = () => {
                 <textarea v-model="add.description" id="description" placeholder="Enter project overview" rows="5" required></textarea>
 
                 <div class="button-wrapper">
-                    <input class="button" type="submit" value="Add Project"> <!--@click="store.addProject(newProject)"-->
+                    <input class="button" type="submit" value="Add Project">
                 </div>
             </form>
         </div>
     </div>
-</template> <!--Is the ID mandatory in the form?-->
+</template>
 
 <style>
 template {
@@ -114,7 +117,7 @@ input, select, textarea{
 }
 
 #date, #status {
-    width:15%
+    width:30%
 }
 
 input::placeholder, select::placeholder, textarea::placeholder {

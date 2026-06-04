@@ -1,6 +1,6 @@
 <script setup>
 import  { ref } from 'vue'
-import DisplayDetails from '@/components/DisplayDetails.vue'
+import ProjectList from '@/components/ProjectList.vue'
 import DisplaySummary from '@/components/DisplaySummary.vue'
 import ProjectForm from '@/components/ProjectForm.vue'
 import Search from '@/components/Search.vue'
@@ -18,9 +18,9 @@ const viewType = ref('all')
   <button @click="viewType = 'all'">All</button>
   <button @click="viewType = 'summary'">Summary</button>
 
-  <DisplayDetails v-if="viewType === 'all'"></DisplayDetails>
-  <ProjectForm></ProjectForm>
+  <ProjectList v-if="viewType === 'all'"></ProjectList>
+  <ProjectForm v-if="viewType === 'all'" @project-submitted="''"></ProjectForm>
 
-  <SummaryDisplay v-if="viewType === 'summary'"></SummaryDisplay>
+  <DisplaySummary v-if="viewType === 'summary'"></DisplaySummary>
 
 </template>
