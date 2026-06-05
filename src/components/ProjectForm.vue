@@ -40,10 +40,7 @@ const onSubmit = () => {
 
 </script>
 
-<template>
-    <div class="page-wrapper">
-        <div class="project-form-container">
-            <h1>New Project</h1>
+<template>       
             <form class="project-form" @submit.prevent="onSubmit">
                 <label for="name">Project Name<span style="color: black;">&#8277;</span></label>
                 <input v-model="add.projectName" id="name" placeholder="Project XYZ" required>
@@ -63,45 +60,24 @@ const onSubmit = () => {
                 </select>
 
                 <label for="description">Description<span style="color: black;">&#8277;</span></label>
-                <textarea v-model="add.description" id="description" placeholder="Enter project overview" rows="5" required></textarea>
+                <textarea v-model="add.description" id="description" placeholder="Enter project overview" required></textarea>
 
                 <div class="button-wrapper">
                     <input class="button" type="submit" value="Add Project">
                 </div>
             </form>
-        </div>
-    </div>
 </template>
 
 <style>
-template {
-    margin: 0px;
-}
-.page-wrapper {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-}
-.project-form-container {
-    padding: 30px;
-    margin: 50px;
-    width: 40%;
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 3px 3px 4px 3px rgba(0,0,0,0.25);
-}
-
 h1 {
     margin: 10px 50px 30px;
 }
-
 label{
     display: block;
     margin: 0px 50px;
     font-weight: bold;
     font-size: large;
 }
-
 input, select, textarea{
     display: block;
     margin: 10px 50px 20px;
@@ -111,28 +87,23 @@ input, select, textarea{
     font-family: serif, Arial, Helvetica;
     font-size: medium;
 }
-
 #name, #owner, #description{
     width: 80%;
 }
-
 #date, #status {
     width:30%
 }
-
 input::placeholder, select::placeholder, textarea::placeholder {
     color: rgba(0,0,0,1s);
     opacity: 0.8;
     font-family: serif, Arial, Helvetica;
     font-size: medium;
 }
-
 .button-wrapper {
     display: flex;
     justify-content: center;
     margin-top: 30px;
 }
-
 .button{
     font-weight: bold;
     font-size: medium;

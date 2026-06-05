@@ -19,7 +19,6 @@ const viewType = ref('all')
   <button @click="viewType = 'summary'">Summary</button>
 
   <ProjectList v-if="viewType === 'all'"></ProjectList>
-  <ProjectForm v-if="viewType === 'all'" @project-submitted="''"></ProjectForm>
 
   <DisplaySummary v-if="viewType === 'summary'"></DisplaySummary>
 

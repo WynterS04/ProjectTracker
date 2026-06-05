@@ -48,9 +48,11 @@ export const useProjectStore = defineStore('project', {
         addProject(newProject: Project) {
             this.projects.push(newProject)
         },
-        deleteProject(oldProject: Project) {
-            let index = this.projects.findIndex(p => p.id === oldProject.id)
-            this.projects.splice(index, 1)
+        deleteProject(id: number) {
+            let index = this.projects.findIndex(p => p.id === id)
+            console.log(index)
+            let removed = this.projects.splice(index, 1)
+            console.log(removed)
         },
         updateProject(updatedProject: Project) {
             let index = this.projects.findIndex(p => p.id === updatedProject.id)
