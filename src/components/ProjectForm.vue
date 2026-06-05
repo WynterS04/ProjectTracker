@@ -60,7 +60,7 @@ const onSubmit = () => {
                 </select>
 
                 <label for="description">Description<span style="color: black;">&#8277;</span></label>
-                <textarea v-model="add.description" id="description" placeholder="Enter project overview" required></textarea>
+                <textarea v-model="add.description" id="description" rows="4" placeholder="Enter project overview" required></textarea>
 
                 <div class="button-wrapper">
                     <input class="button" type="submit" value="Add Project">
