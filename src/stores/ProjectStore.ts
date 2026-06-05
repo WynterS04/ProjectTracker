@@ -15,12 +15,16 @@ description: string
 
 export const useProjectStore = defineStore('project', {
     state: () => ({
-        projects: [] as Project[]
+        projects: [
+            {id: 0, project: 'Project Tracker', owner: 'Wynter Stroman', status: 'In Progress', date: '06/15/2026', description: 'Building web app to track team projects'},
+            {id: 1, project: 'Project Tracker', owner: 'Minna Azeem', status: 'In Progress', date: '06/15/2026', description: 'Building web app to track team projects'},
+            {id: 2, project: 'Jenkins Pipeline', owner: 'Wynter Stroman', status: 'Not Started', date: '06/23/2026', description: 'Automate tasks after code is pushed'}
+        ] as Project[]
     }),
     getters: {
         filterByStatus(state) {
-             return (status: String)  => { 
-                state.projects.filter(project => project.status === status) //returns array of projects only with the given status
+             return (status: ProjectStatus)  => { 
+                return state.projects.filter(project => project.status === status) //returns array of projects only with the given status
             }
         },
         summmarizeProjects(state) {

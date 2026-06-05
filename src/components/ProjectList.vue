@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { reactive } from 'vue'
 import { useProjectStore } from '@/stores/ProjectStore'
 import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
@@ -10,6 +9,13 @@ const store = useProjectStore()
 
 const headers = ['Id', 'Name', 'Owner', 'Date', 'Status', 'Description']
 
+const arrayToDisplay = ref<Project[]>(store.projects)
+
+const status = ref<ProjectStatus>('Not Started')
+
+function getStatusArray(status: ProjectStatus) {
+    arrayToDisplay.value = store.filterByStatus(status)
+}
 
 /* Delete Modal */
 const showDeleteModal = ref(false)
@@ -36,7 +42,7 @@ function openAddModal() {
 
 function closeAddModal() {
     showAddModal.value = false
-} //listener for project-submitted
+}
 
 </script>
 
@@ -46,10 +52,22 @@ function closeAddModal() {
             <thead>
                 <tr>
                     <th v-for=" header in headers" :key="header">{{ header }}</th>
+
+                    <!-- Filtering by Status -->
+                    <th>
+                        <select class="status-filter" v-model="status" @change="getStatusArray(status)">
+                                <option value ="Not Started">Not Started</option>
+                                <option value = "In Progress">In-Progress</option>
+                                <option value = "Complete">Complete</option>
+                        </select>
+                    </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(row, index) in store.projects" :key="index">
+                <p v-if="arrayToDisplay.length === 0">
+                        No projects listed with this status.
+                </p>
+                <tr v-else v-for="(row, index) in arrayToDisplay" :key="index">
                     <td>{{ row.id }}</td>
                     <td>{{ row.project }}</td>
                     <td>{{ row.owner }}</td>
@@ -73,7 +91,6 @@ function closeAddModal() {
 
                     <!--edit project-->
                     <i class="fa-solid fa-pen-to-square fa-lg" id="edit"></i>
-                    
                 </tr>
             </tbody>
         </table>
@@ -102,6 +119,9 @@ table {
 }
 th {
     font-size: larger;
+}
+.status-filter {
+    border-radius: 0px;
 }
 #trash, #edit {
     margin: 0px 8px 0px;

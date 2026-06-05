@@ -16,11 +16,11 @@ const add = reactive({
     description: ''
 })
 
-let id: number = 0
+let id: number = 2
 
 const onSubmit = () => {
     const newProject: Project = {
-        id: id++,
+        id: ++id,
         project: add.projectName,
         owner: add.owner,
         date: add.date,

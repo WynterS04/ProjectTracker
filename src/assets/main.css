@@ -9,11 +9,6 @@ tr {
 th, td {
     padding-right: 35px;
 }
-
-select {
-    align-items:end;
-}
-
 .color-circle {
     width: 15px;
     height: 15px;
