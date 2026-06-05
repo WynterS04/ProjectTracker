@@ -82,7 +82,10 @@ function closeAddModal() {
         <i class="far fa-plus-square fa-lg" id="add" @click="openAddModal"></i>
         <div v-if="showAddModal" class="modal-backdrop">
             <div class="project-form-container">
+                <div class="modal-header">
                 <h1>New Project</h1>
+                    <i class="fas fa-xmark" id="close" @click="closeAddModal"></i>
+                </div>
 
                 <div class="modal-body">
                     <ProjectForm @project-submitted="closeAddModal"></ProjectForm>
@@ -149,7 +152,19 @@ button.danger {
 
     display: flex;
     flex-direction: column;
-    
+}
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+#close {
+    position: relative;
+    left: -35px;
+    top: 13px;
+}
+#close:hover {
+    color: rgba(99, 98, 98, 0.416);
 }
 .modal-body {
   flex: 1;
