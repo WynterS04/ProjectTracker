@@ -29,7 +29,7 @@ export const useProjectStore = defineStore('project', {
         },
         searchByName(state) {
             return(name: String) => {
-                return state.projects.filter(project => project.project === name)
+                return state.projects.filter(project => project.project.toLowerCase().includes(name.toLowerCase()))
             }
         },
         summmarizeProjects(state) {

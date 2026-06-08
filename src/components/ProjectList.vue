@@ -13,9 +13,7 @@ const arrayToDisplay = ref<Project[]>(store.projects)
 
 const status = ref<ProjectStatus>('Not Started')
 
-function getStatusArray(status: ProjectStatus) {
-    arrayToDisplay.value = store.filterByStatus(status)
-}
+const searchTerm = ref('')
 
 /* Delete Modal */
 const showDeleteModal = ref(false)
@@ -71,7 +69,7 @@ function closeEditModal() {
                     <th>
                         <form>
                             <label>Status Filtering</label>
-                            <select class="status-filter" v-model="status" @change="getStatusArray(status)">
+                            <select class="status-filter" v-model="status" @change="arrayToDisplay = store.filterByStatus(status)">
                                     <option value ="Not Started">Not Started</option>
                                     <option value = "In Progress">In-Progress</option>
                                     <option value = "Complete">Complete</option>
@@ -82,8 +80,8 @@ function closeEditModal() {
                     <!-- Search -->
                     <th>
                         <form>
-                            <label for="searchName" style="text-align: end;">Search</label>
-                            <input id="searchName" type="search" placeholder="Enter Project Name">
+                            <label style="text-align: end;">Search</label>
+                            <input v-model="searchTerm" @input="arrayToDisplay = store.searchByName(searchTerm)" type="search" placeholder="Enter Project Name">
                         </form>
                     </th>
                 </tr>
