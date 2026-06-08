@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { useProjectStore } from '@/stores/ProjectStore'
 import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
@@ -44,6 +44,20 @@ function closeAddModal() {
     showAddModal.value = false
 }
 
+/* Edit Modal */
+const showEditModal = ref(false)
+
+const selectedProject = ref<Project | null>(null)
+
+const openEditModal = (project: Project) => {
+  selectedProject.value = project
+  showEditModal.value = true
+}
+
+function closeEditModal() {
+    showEditModal.value = false
+}
+
 </script>
 
 <template>
@@ -55,11 +69,22 @@ function closeAddModal() {
 
                     <!-- Filtering by Status -->
                     <th>
-                        <select class="status-filter" v-model="status" @change="getStatusArray(status)">
-                                <option value ="Not Started">Not Started</option>
-                                <option value = "In Progress">In-Progress</option>
-                                <option value = "Complete">Complete</option>
-                        </select>
+                        <form>
+                            <label>Status Filtering</label>
+                            <select class="status-filter" v-model="status" @change="getStatusArray(status)">
+                                    <option value ="Not Started">Not Started</option>
+                                    <option value = "In Progress">In-Progress</option>
+                                    <option value = "Complete">Complete</option>
+                            </select>
+                        </form>
+                    </th>
+
+                    <!-- Search -->
+                    <th>
+                        <form>
+                            <label for="searchName" style="text-align: end;">Search</label>
+                            <input id="searchName" type="search" placeholder="Enter Project Name">
+                        </form>
                     </th>
                 </tr>
             </thead>
@@ -73,7 +98,7 @@ function closeAddModal() {
                     <td>{{ row.owner }}</td>
                     <td>{{ row.date }}</td>
                     <td>{{ row.status }}</td>
-                    <td>{{ row.description }}</td>
+                    <td colspan="2">{{ row.description }}</td>
 
                     <!--confirm & delete project-->
                     <i class="fas fa-trash fa-lg" role="button" id="trash" @click="openDeleteModal()"></i>
@@ -90,7 +115,19 @@ function closeAddModal() {
                     </div>
 
                     <!--edit project-->
-                    <i class="fa-solid fa-pen-to-square fa-lg" id="edit"></i>
+                    <i class="fa-solid fa-pen-to-square fa-lg" id="edit" @click="openEditModal(row)"></i>
+                    <div v-if="showEditModal" class="modal-backdrop">
+                        <div class="project-form-container">
+                            <div class="modal-header">
+                            <h1>Edit Project</h1>
+                                <i class="fas fa-xmark" id="close" @click="closeEditModal"></i>
+                            </div>
+
+                            <div class="modal-body">
+                                <ProjectForm v-if="selectedProject" :project="selectedProject" action="edit" buttonText="Save Changes" @project-edited="closeEditModal"></ProjectForm>
+                            </div>
+                        </div>
+                    </div>
                 </tr>
             </tbody>
         </table>
@@ -105,7 +142,7 @@ function closeAddModal() {
                 </div>
 
                 <div class="modal-body">
-                    <ProjectForm @project-submitted="closeAddModal"></ProjectForm>
+                    <ProjectForm action="add" buttonText="Add Project" @project-submitted="closeAddModal"></ProjectForm>
                 </div>
             </div>
         </div>

@@ -4,55 +4,65 @@ import { useProjectStore } from '@/stores/ProjectStore'
 import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
 
-const emit = defineEmits(['project-submitted'])
+const emit = defineEmits(['project-submitted', 'project-edited'])
 
 const store = useProjectStore()
 
-const add = reactive({
-    projectName: '',
-    owner: '',
-    date: '',
-    status: 'Not Started' as ProjectStatus,
-    description: ''
-})
+const props = defineProps<{
+    project?: Project
+    buttonText: string
+    action: 'add' | 'edit'
+}>()
 
-let id: number = 2
+const form = reactive({
+  projectName: props.project?.project ?? '',
+  owner: props.project?.owner ?? '',
+  date: props.project?.date ?? '',
+  status: props.project?.status ?? 'Not Started' as ProjectStatus,
+  description: props.project?.description ?? ''
+})
 
 const onSubmit = () => {
     const newProject: Project = {
-        id: ++id,
-        project: add.projectName,
-        owner: add.owner,
-        date: add.date,
-        status: add.status,
-        description: add.description
+        id: props.project?.id ?? 0,
+        project: form.projectName,
+        owner: form.owner,
+        date: form.date,
+        status: form.status,
+        description: form.description
     }
-    store.addProject(newProject)
+    console.log(props.action)
+    console.log(newProject.id)
+    if(props.action === "add") {
+        store.addProject(newProject)
 
-    emit('project-submitted', newProject)
+        emit('project-submitted', newProject)
 
-    add.projectName = ''
-    add.owner = ''
-    add.date = ''
-    add.status = 'Not Started' as ProjectStatus
-    add.description = ''
+        form.projectName = ''
+        form.owner = ''
+        form.date = ''
+        form.status = 'Not Started' as ProjectStatus
+        form.description = ''
+    }else{
+        store.updateProject(newProject, newProject.id)
+        emit('project-edited', newProject)
+    }
 }
-
 </script>
 
-<template>       
+<template>
             <form class="project-form" @submit.prevent="onSubmit">
                 <label for="name">Project Name<span style="color: black;">&#8277;</span></label>
-                <input v-model="add.projectName" id="name" placeholder="Project XYZ" required>
+                <input v-model="form.projectName" id="name" placeholder="Project XYZ" required>
                 
                 <label for="owner">Owner<span style="color: black;">&#8277;</span></label>
-                <input v-model="add.owner" id="owner" placeholder="John Doe" required>
+                <input v-model="form.owner" id="owner" placeholder="John Doe" required>
 
                 <label for="date">Due Date<span style="color: black;">&#8277;</span></label>
-                <input v-model="add.date"  id="date" type="date" required>
+                <input v-model="form.date"  id="date" type="date" required>
 
                 <label for="status">Status<span style="color: black;">&#8277;</span></label>
-                <select v-model="add.status" id="status" required>
+                <select v-model="form.status" id="status" required>
                     <option> </option>
                     <option>Not Started</option>
                     <option>In Progress</option>
@@ -60,10 +70,10 @@ const onSubmit = () => {
                 </select>
 
                 <label for="description">Description<span style="color: black;">&#8277;</span></label>
-                <textarea v-model="add.description" id="description" rows="4" placeholder="Enter project overview" required></textarea>
+                <textarea v-model="form.description" id="description" rows="4" placeholder="Enter project overview" required></textarea>
 
                 <div class="button-wrapper">
-                    <input class="button" type="submit" value="Add Project">
+                    <input class="button" type="submit" :value="props.buttonText">
                 </div>
             </form>
 </template>
