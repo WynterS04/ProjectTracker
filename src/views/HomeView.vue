@@ -14,13 +14,16 @@ const store = useProjectStore()
 
 const arrayToDisplay = ref<Project[]>(store.projects)
 
-const status = ref<ProjectStatus>('Not Started')
+const status = ref<ProjectStatus>()
 
 watch(status, (newStatus) => {
-    console.log(newStatus)
-    console.log(store.filterByStatus(newStatus))
+    if(newStatus === null) {
+        arrayToDisplay.value = store.projects
+    }
     arrayToDisplay.value = newStatus ? store.filterByStatus(newStatus) : store.projects
 })
+
+const searchTerm = ref('')
 </script>
 
 <template>
@@ -34,18 +37,27 @@ watch(status, (newStatus) => {
                 <button @click="viewType = 'summary';">Summary</button>
             </div>
 
-            <!-- Filtering By Status -->
-            <form class="status-filter">
-                <label>Status Filtering</label>
-                <select v-model="status">
-                        <option value ="Not Started">Not Started</option>
-                        <option value = "In Progress">In-Progress</option>
-                        <option value = "Complete">Complete</option>
-                </select>
-            </form>
+            <div class="user-actions">
+                <!-- Filtering By Status -->
+                <form class="status-filter">
+                    <label>Status Filtering</label>
+                    <select v-model="status">
+                            <option value ="Not Started">Not Started</option>
+                            <option value = "In Progress">In-Progress</option>
+                            <option value = "Complete">Complete</option>
+                            <option :value=null>All</option>
+                    </select>
+                </form>
 
-            <!-- Search -->
-
+                <!-- Search -->
+                <form>
+                    <label style="text-align: end; position: relative; left: -30px;">Search</label>
+                    <div class="search-project">
+                        <input id="search-bar" style="z-index: 1;" v-model="searchTerm" @input="arrayToDisplay = store.searchByName(searchTerm)" type="search" placeholder="Enter Project Name">
+                        <i class="fa-solid fa-magnifying-glass" style="z-index: 2;" id="search"></i>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="projectlist-wrapper">
@@ -76,7 +88,7 @@ watch(status, (newStatus) => {
     border-radius: 5px;
 }
 h1{
-    margin-left: 20px;
+    margin: 20px 20px 10px;
 }
 button:hover{
     color:black ;
@@ -88,7 +100,11 @@ button {
     background: transparent;
     color: darkgrey;
     padding: 0px 12px 0px;
-    font-size: 20px;
+    font-size: 22px;
+}
+.project-view {
+    position: relative;
+    top: 40px;
 }
 .top-bar {
     display: flex;
@@ -96,14 +112,30 @@ button {
     padding: 10px 10px 0px;
     justify-content: space-between;
 }
+.user-actions {
+    display: flex;
+    flex-direction: row;
+}
 select {
     border-radius: 0px;
     width:50% ;
 }
 .status-filter {
     position: relative;
-    top: -30px;
+    top: 0px;
     font-size: medium;
 }
-
+.search-project {
+    display:flex;
+    flex-direction: row;
+}
+.search-bar:focus {
+    position: relative;
+    z-index: 3;
+}
+#search {
+    position: relative;
+    left: -95px;
+    top: 19px;
+}
 </style>

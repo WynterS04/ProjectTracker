@@ -15,8 +15,6 @@ const headers = ['Id', 'Name', 'Owner', 'Date', 'Status', 'Description']
 
 const status = ref<ProjectStatus>('Not Started')
 
-const searchTerm = ref('')
-
 /* Delete Modal */
 const showDeleteModal = ref(false)
 
@@ -68,14 +66,6 @@ function closeEditModal() {
             <thead>
                 <tr>
                     <th v-for=" header in headers" :key="header">{{ header }}</th>
-
-                    <!-- Search 
-                    <th>
-                        <form>
-                            <label style="text-align: end;">Search</label>
-                            <input v-model="searchTerm" @input="arrayToDisplay = store.searchByName(searchTerm)" type="search" placeholder="Enter Project Name">
-                        </form>
-                    </th>-->
                 </tr>
             </thead>
             <tbody>
