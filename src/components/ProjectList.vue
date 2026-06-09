@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, computed } from 'vue'
 import { useProjectStore } from '@/stores/ProjectStore'
 import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
@@ -7,9 +7,11 @@ import ProjectForm from '@/components/ProjectForm.vue'
 
 const store = useProjectStore()
 
-const headers = ['Id', 'Name', 'Owner', 'Date', 'Status', 'Description']
+const props = defineProps<{
+    project: Project[]
+}>()
 
-const arrayToDisplay = ref<Project[]>(store.projects)
+const headers = ['Id', 'Name', 'Owner', 'Date', 'Status', 'Description']
 
 const status = ref<ProjectStatus>('Not Started')
 
@@ -18,7 +20,8 @@ const searchTerm = ref('')
 /* Delete Modal */
 const showDeleteModal = ref(false)
 
-function openDeleteModal() {
+const openDeleteModal = (project: Project) => {
+    selectedProject.value = project
     showDeleteModal.value = true
 }
 
@@ -54,6 +57,7 @@ const openEditModal = (project: Project) => {
 
 function closeEditModal() {
     showEditModal.value = false
+    selectedProject.value = null
 }
 
 </script>
@@ -65,32 +69,22 @@ function closeEditModal() {
                 <tr>
                     <th v-for=" header in headers" :key="header">{{ header }}</th>
 
-                    <!-- Filtering by Status -->
-                    <th>
-                        <form>
-                            <label>Status Filtering</label>
-                            <select class="status-filter" v-model="status" @change="arrayToDisplay = store.filterByStatus(status)">
-                                    <option value ="Not Started">Not Started</option>
-                                    <option value = "In Progress">In-Progress</option>
-                                    <option value = "Complete">Complete</option>
-                            </select>
-                        </form>
-                    </th>
-
-                    <!-- Search -->
+                    <!-- Search 
                     <th>
                         <form>
                             <label style="text-align: end;">Search</label>
                             <input v-model="searchTerm" @input="arrayToDisplay = store.searchByName(searchTerm)" type="search" placeholder="Enter Project Name">
                         </form>
-                    </th>
+                    </th>-->
                 </tr>
             </thead>
             <tbody>
-                <p v-if="arrayToDisplay.length === 0">
+
+                <!-- Display Projects -->
+                <p v-if="props.project.length === 0">
                         No projects listed with this status.
                 </p>
-                <tr v-else v-for="(row, index) in arrayToDisplay" :key="index">
+                <tr  v-else v-for="(row, index) in props.project" :key="index">
                     <td>{{ row.id }}</td>
                     <td>{{ row.project }}</td>
                     <td>{{ row.owner }}</td>
@@ -99,11 +93,11 @@ function closeEditModal() {
                     <td colspan="2">{{ row.description }}</td>
 
                     <!--confirm & delete project-->
-                    <i class="fas fa-trash fa-lg" role="button" id="trash" @click="openDeleteModal()"></i>
+                    <i class="fas fa-trash fa-lg" role="button" id="trash" @click="openDeleteModal(row)"></i>
                     <div v-if="showDeleteModal" class="modal-backdrop">
                         <div class="modal">
-                            <h4>Delete Confirmation</h4>
-                            <p>Are you sure you want to remove the project <strong>{{ row.project }}</strong>?</p>
+                            <h3>Delete Confirmation</h3>
+                            <p>Are you sure you want to remove the "<strong>{{ selectedProject?.project }}</strong>" project?</p>
 
                             <div class="modal-actions">
                                 <button @click="closeDeleteModal">Cancel</button>
@@ -131,12 +125,15 @@ function closeEditModal() {
         </table>
 
         <!--add project-->
-        <i class="far fa-plus-square fa-lg" id="add" @click="openAddModal"></i>
+        <div class="add-project-button" @click="openAddModal">
+            <i class="far fa-plus-square fa-lg" id="add"></i>
+            <p>Add Project</p>
+        </div>
         <div v-if="showAddModal" class="modal-backdrop">
             <div class="project-form-container">
-                <div class="modal-header">
-                <h1>New Project</h1>
-                    <i class="fas fa-xmark" id="close" @click="closeAddModal"></i>
+                <div class="modal-header" style="margin: 20px 0px 25px;">
+                <h1 style="font-size: 48px; padding-left: 30px;">New Project</h1>
+                    <i class="fas fa-xmark fa-lg" id="close" @click="closeAddModal"></i>
                 </div>
 
                 <div class="modal-body">
@@ -152,20 +149,27 @@ function closeEditModal() {
 table {
     margin: 15px 20px 8px;
 }
-th {
-    font-size: larger;
+thead {
+    background: rgb(0,0,0,0.05);
 }
-.status-filter {
-    border-radius: 0px;
+th, tr {
+    font-size: larger;
+    padding: 20px 7px 25px;
+}
+td {
+    padding: 12px;
+}
+label {
+    font-size: 23px;
 }
 #trash, #edit {
-    margin: 0px 8px 0px;
+    margin: 17px 8px 17px;
 }
 #trash:hover {
     color: rgb(243, 44, 31);
 }
 #edit:hover {
-    color: rgba(14, 134, 231, 1.00)
+    color: #00A86B
 }
 .modal-backdrop {
   position: fixed;
@@ -180,28 +184,49 @@ th {
   padding: 1.5rem;
   border-radius: 6px;
   width: 400px;
+  line-height: 28px;
 }
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
 }
+button {
+    padding: 5px;
+    border-radius: 5px;
+    font-size: medium;
+}
+button:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+button.danger:hover {
+    background: rgb(114, 4, 4);
+}
 button.danger {
   background: #e53935;
   color: white;
 }
-#add {
-    margin: 0px 20px 20px
+.add-project-button {
+    display: flex;
+    flex-direction: row;
+    width: 10%;
+    border-radius: 8px;
 }
-#add:hover {
-    color: #00A86B;
+.add-project-button:hover  {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform: translateY(-5px) scale(1.03);
+    color: #233CCA;
+}
+#add {
+    margin: 26px 20px 20px;
+    margin-right:10px ;
 }
 .project-form-container {
     background: white;
     padding: 30px;
     margin: 50px;
     width: 40%;
-    height: 84%;
+    height: fit-content;
     border-radius: 12px;
     box-shadow: 3px 3px 4px 3px rgba(0,0,0,0.25);
 
@@ -215,8 +240,8 @@ button.danger {
 }
 #close {
     position: relative;
-    left: -35px;
-    top: 13px;
+    left: -70px;
+    top: 40px;
 }
 #close:hover {
     color: rgba(99, 98, 98, 0.416);

@@ -52,16 +52,16 @@ const onSubmit = () => {
 
 <template>
             <form class="project-form" @submit.prevent="onSubmit">
-                <label for="name">Project Name<span style="color: black;">&#8277;</span></label>
+                <label for="name">Project Name<span style="color: #D71515 ;">&#8277;</span></label>
                 <input v-model="form.projectName" id="name" placeholder="Project XYZ" required>
                 
-                <label for="owner">Owner<span style="color: black;">&#8277;</span></label>
+                <label for="owner">Owner<span style="color: #D71515;">&#8277;</span></label>
                 <input v-model="form.owner" id="owner" placeholder="John Doe" required>
 
-                <label for="date">Due Date<span style="color: black;">&#8277;</span></label>
+                <label for="date">Due Date<span style="color: #D71515;">&#8277;</span></label>
                 <input v-model="form.date"  id="date" type="date" required>
 
-                <label for="status">Status<span style="color: black;">&#8277;</span></label>
+                <label for="status">Status<span style="color: #D71515;">&#8277;</span></label>
                 <select v-model="form.status" id="status" required>
                     <option> </option>
                     <option>Not Started</option>
@@ -69,7 +69,7 @@ const onSubmit = () => {
                     <option>Completed</option>
                 </select>
 
-                <label for="description">Description<span style="color: black;">&#8277;</span></label>
+                <label for="description">Description<span style="color: #D71515;">&#8277;</span></label>
                 <textarea v-model="form.description" id="description" rows="4" placeholder="Enter project overview" required></textarea>
 
                 <div class="button-wrapper">
