@@ -18,7 +18,7 @@ const form = reactive({
   projectName: props.project?.project ?? '',
   owner: props.project?.owner ?? '',
   date: props.project?.date ?? '',
-  status: props.project?.status ?? 'Not Started' as ProjectStatus,
+  status: props.project?.status ?? '' as ProjectStatus,
   description: props.project?.description ?? ''
 })
 
@@ -63,10 +63,9 @@ const onSubmit = () => {
 
                 <label for="status">Status<span style="color: #D71515;">&#8277;</span></label>
                 <select v-model="form.status" id="status" required>
-                    <option> </option>
                     <option>Not Started</option>
                     <option>In Progress</option>
-                    <option>Completed</option>
+                    <option>Complete</option>
                 </select>
 
                 <label for="description">Description<span style="color: #D71515;">&#8277;</span></label>
@@ -95,7 +94,7 @@ input, select, textarea{
     border-radius: 8px;
     padding: 7px;
     font-family: serif, Arial, Helvetica;
-    font-size: medium;
+    font-size: large;
 }
 #name, #owner, #description{
     width: 80%;

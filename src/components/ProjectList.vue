@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useProjectStore } from '@/stores/ProjectStore'
 import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
@@ -62,7 +62,7 @@ function closeEditModal() {
 
 <template>
     <div class="all-projects">
-        <table class="project-table">
+        <table class="project-table" data-test="project-table">
             <thead>
                 <tr>
                     <th v-for=" header in headers" :key="header">{{ header }}</th>
@@ -121,8 +121,8 @@ function closeEditModal() {
         </div>
         <div v-if="showAddModal" class="modal-backdrop">
             <div class="project-form-container">
-                <div class="modal-header" style="margin: 20px 0px 25px;">
-                <h1 style="font-size: 48px; padding-left: 30px;">New Project</h1>
+                <div class="modal-header">
+                <h1>New Project</h1>
                     <i class="fas fa-xmark fa-lg" id="close" @click="closeAddModal"></i>
                 </div>
 
@@ -136,6 +136,10 @@ function closeEditModal() {
 </template>
 
 <style>
+.modal-header h1 {
+    font-size: 48px; 
+    padding: 0px 50px 10px;
+}
 table {
     margin: 15px 20px 8px;
 }
@@ -168,6 +172,9 @@ label {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.modal-header {
+    margin: 20px 0px 25px;
 }
 .modal {
   background: white;
@@ -215,7 +222,7 @@ button.danger {
     background: white;
     padding: 30px;
     margin: 50px;
-    width: 40%;
+    width: 30%;
     height: fit-content;
     border-radius: 12px;
     box-shadow: 3px 3px 4px 3px rgba(0,0,0,0.25);

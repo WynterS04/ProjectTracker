@@ -5,8 +5,6 @@ import DisplaySummary from '@/components/DisplaySummary.vue'
 import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
 import { useProjectStore } from '@/stores/ProjectStore'
-import ProjectForm from '@/components/ProjectForm.vue'
-import Search from '@/components/Search.vue'
 
 const viewType = ref('all')
 
@@ -33,8 +31,8 @@ const searchTerm = ref('')
         <h1>Projects</h1>
         <div class="top-bar">
             <div class="project-view">
-                <button @click="viewType = 'all';">All Projects</button>
-                <button @click="viewType = 'summary';">Summary</button>
+                <button data-test="all-projects-button" @click="viewType = 'all';">All Projects</button>
+                <button data-test="project-summary-button" @click="viewType = 'summary';">Summary</button>
             </div>
 
             <div class="user-actions">
@@ -53,8 +51,8 @@ const searchTerm = ref('')
                 <form>
                     <label style="text-align: end; position: relative; left: -30px;">Search</label>
                     <div class="search-project">
-                        <input id="search-bar" style="z-index: 1;" v-model="searchTerm" @input="arrayToDisplay = store.searchByName(searchTerm)" type="search" placeholder="Enter Project Name">
-                        <i class="fa-solid fa-magnifying-glass" style="z-index: 2;" id="search"></i>
+                        <input id="search-bar" v-model="searchTerm" @input="arrayToDisplay = store.searchByName(searchTerm)" type="search" placeholder="Enter Project Name">
+                        <i class="fa-solid fa-magnifying-glass" id="search"></i>
                     </div>
                 </form>
             </div>
@@ -71,6 +69,10 @@ const searchTerm = ref('')
 </template>
 
 <style>
+h1 {
+    font-size: 48px;
+    padding-left: 30px;
+}
 .page-wrapper {
     background: rgb(0,0,0,0.05);
     padding: 20px 20px 20px;
@@ -88,7 +90,7 @@ const searchTerm = ref('')
     border-radius: 5px;
 }
 h1{
-    margin: 20px 20px 10px;
+    margin: 20px 0px 10px;
 }
 button:hover{
     color:black ;
@@ -109,7 +111,7 @@ button {
 .top-bar {
     display: flex;
     flex-direction: row;
-    padding: 10px 10px 0px;
+    padding: 10px 20px 0px;
     justify-content: space-between;
 }
 .user-actions {
