@@ -72,7 +72,7 @@ const onSubmit = () => {
                 <textarea v-model="form.description" id="description" rows="4" placeholder="Enter project overview" required></textarea>
 
                 <div class="button-wrapper">
-                    <input class="button" type="submit" :value="props.buttonText">
+                    <input data-test="submit-button" class="button" type="submit" :value="props.buttonText">
                 </div>
             </form>
 </template>

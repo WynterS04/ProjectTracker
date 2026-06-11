@@ -83,26 +83,26 @@ function closeEditModal() {
                     <td colspan="2">{{ row.description }}</td>
 
                     <!--confirm & delete project-->
-                    <i class="fas fa-trash fa-lg" role="button" id="trash" @click="openDeleteModal(row)"></i>
+                    <i data-test="delete-icon" class="fas fa-trash fa-lg" role="button" id="trash" @click="openDeleteModal(row)"></i>
                     <div v-if="showDeleteModal" class="modal-backdrop">
-                        <div class="modal">
+                        <div data-test="delete-modal" class="modal">
                             <h3>Delete Confirmation</h3>
                             <p>Are you sure you want to remove the "<strong>{{ selectedProject?.project }}</strong>" project?</p>
 
                             <div class="modal-actions">
-                                <button @click="closeDeleteModal">Cancel</button>
-                                <button class="danger" @click="confirmDelete(row.id)">Delete</button>
+                                <button data-test="cancel-button" @click="closeDeleteModal">Cancel</button>
+                                <button data-test="delete-button" class="danger" @click="confirmDelete(row.id)">Delete</button>
                             </div>
                         </div>
                     </div>
 
                     <!--edit project-->
-                    <i class="fa-solid fa-pen-to-square fa-lg" id="edit" @click="openEditModal(row)"></i>
+                    <i data-test="edit-icon" class="fa-solid fa-pen-to-square fa-lg" id="edit" @click="openEditModal(row)"></i>
                     <div v-if="showEditModal" class="modal-backdrop">
-                        <div class="project-form-container">
+                        <div data-test="edit-modal" class="project-form-container">
                             <div class="modal-header">
                             <h1>Edit Project</h1>
-                                <i class="fas fa-xmark" id="close" @click="closeEditModal"></i>
+                                <i data-test="cancel-button" class="fas fa-xmark" id="close" @click="closeEditModal"></i>
                             </div>
 
                             <div class="modal-body">
@@ -116,14 +116,14 @@ function closeEditModal() {
 
         <!--add project-->
         <div class="add-project-button" @click="openAddModal">
-            <i class="far fa-plus-square fa-lg" id="add"></i>
+            <i data-test="add-icon" class="far fa-plus-square fa-lg" id="add"></i>
             <p>Add Project</p>
         </div>
         <div v-if="showAddModal" class="modal-backdrop">
-            <div class="project-form-container">
+            <div data-test="add-modal" class="project-form-container">
                 <div class="modal-header">
                 <h1>New Project</h1>
-                    <i class="fas fa-xmark fa-lg" id="close" @click="closeAddModal"></i>
+                    <i data-test="cancel-button" class="fas fa-xmark fa-lg" id="close" @click="closeAddModal"></i>
                 </div>
 
                 <div class="modal-body">
