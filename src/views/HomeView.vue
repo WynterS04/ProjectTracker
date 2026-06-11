@@ -39,7 +39,7 @@ const searchTerm = ref('')
                 <!-- Filtering By Status -->
                 <form class="status-filter">
                     <label>Status Filtering</label>
-                    <select v-model="status">
+                    <select data-test="status-select" v-model="status">
                             <option value ="Not Started">Not Started</option>
                             <option value = "In Progress">In-Progress</option>
                             <option value = "Complete">Complete</option>

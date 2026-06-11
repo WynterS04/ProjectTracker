@@ -9,7 +9,7 @@ const totals = computed(() => store.summmarizeProjects)
 const summaryItems = computed(() => [
   { status: 'Not Started', color: 'grey', total: totals.value[1] },
   { status: 'In Progress', color: '#FFA500', total: totals.value[2] },
-  { status: 'Completed', color: '#008000', total: totals.value[3] }
+  { status: 'Complete', color: '#008000', total: totals.value[3] }
 ])
 
 const hoveredStatus = ref<string | null>(null)

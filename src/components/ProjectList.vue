@@ -71,10 +71,10 @@ function closeEditModal() {
             <tbody>
 
                 <!-- Display Projects -->
-                <p v-if="props.project.length === 0">
+                <p v-if="props.project.length === 0" style="font-size:larger ;">
                         No projects listed with this status.
                 </p>
-                <tr  v-else v-for="(row, index) in props.project" :key="index">
+                <tr data-test="project-row" v-else v-for="(row, index) in props.project" :key="index">
                     <td>{{ row.id }}</td>
                     <td>{{ row.project }}</td>
                     <td>{{ row.owner }}</td>
