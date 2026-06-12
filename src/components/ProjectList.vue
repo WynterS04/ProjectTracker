@@ -144,7 +144,7 @@ table {
     margin: 15px 20px 8px;
 }
 thead {
-    background: rgb(0,0,0,0.05);
+    background: #e4f5fde7;
 }
 th, tr {
     font-size: larger;

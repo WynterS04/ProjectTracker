@@ -27,7 +27,6 @@ const searchTerm = ref('')
 <template>
     <div class="nav-bar">
         <h1>BCBS Project Tracker</h1>
-        <img src="src/assets/images/logo.png">
     </div>
     
     <div class="page-wrapper">
@@ -72,16 +71,16 @@ const searchTerm = ref('')
 </template>
 
 <style>
-h1 {
-    font-size: 48px;
+.page-wrapper h1 {
+    font-size: 40px;
     padding-left: 30px;
 }
 .page-wrapper {
-    background: rgb(0,0,0,0.05);
-    padding: 20px 20px 20px;
+    background-color: white;
+    padding: 20px;
     margin: 0px 70px 0px;
     height: 80%;
-    width: 90%;
+    width: 85%;
     border-radius: 3px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.22);
 }
