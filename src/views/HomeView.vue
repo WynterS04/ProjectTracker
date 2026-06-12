@@ -25,7 +25,10 @@ const searchTerm = ref('')
 </script>
 
 <template>
-    <div class="nav-bar"></div>
+    <div class="nav-bar">
+        <h1>BCBS Project Tracker</h1>
+        <img src="src/assets/images/logo.png">
+    </div>
     
     <div class="page-wrapper">
         <h1>Projects</h1>
@@ -81,7 +84,6 @@ h1 {
     width: 90%;
     border-radius: 3px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.22);
-    
 }
 .projectlist-wrapper {
     background: white;
@@ -92,12 +94,12 @@ h1 {
 h1{
     margin: 20px 0px 10px;
 }
-button:hover{
+.project-view button:hover{
     color:black ;
     background: transparent;
     text-decoration: underline;
 }
-button {
+.project-view button {
     border: transparent;
     background: transparent;
     color: darkgrey;

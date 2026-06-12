@@ -188,16 +188,19 @@ label {
   justify-content: flex-end;
   gap: 0.75rem;
 }
-button {
+.modal-actions button {
     padding: 5px;
-    border-radius: 5px;
-    font-size: medium;
+    border-radius: 8px;
+    font-size: large;
+    border: 1px solid black;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.2);
 }
 button:hover {
     background: rgba(0, 0, 0, 0.5);
 }
 button.danger:hover {
     background: rgb(114, 4, 4);
+    color: black;
 }
 button.danger {
   background: #e53935;
@@ -206,7 +209,7 @@ button.danger {
 .add-project-button {
     display: flex;
     flex-direction: row;
-    width: 10%;
+    width:fit-content;
     border-radius: 8px;
 }
 .add-project-button:hover  {
@@ -222,8 +225,8 @@ button.danger {
     background: white;
     padding: 30px;
     margin: 50px;
-    width: 30%;
-    height: fit-content;
+    width: 40%;
+    height: 85%;
     border-radius: 12px;
     box-shadow: 3px 3px 4px 3px rgba(0,0,0,0.25);
 
