@@ -49,7 +49,7 @@ const searchTerm = ref('')
 
                 <!-- Search -->
                 <form>
-                    <label style="text-align: end; position: relative; left: -30px;">Search</label>
+                    <label for="search-bar" style="text-align: end; position: relative; left: -30px;">Search</label>
                     <div class="search-project">
                         <input id="search-bar" v-model="searchTerm" @input="arrayToDisplay = store.searchByName(searchTerm)" type="search" placeholder="Enter Project Name">
                         <i class="fa-solid fa-magnifying-glass" id="search"></i>

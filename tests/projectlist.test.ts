@@ -7,7 +7,7 @@ import ProjectList from '@/components/ProjectList.vue';
 import { useProjectStore } from '@/stores/ProjectStore'
 import type { Project } from '@/stores/ProjectStore';
 
-describe('ProjectList', () => {
+describe('Project List Testing', () => {
     beforeEach(() => {
         setActivePinia(createPinia());
     });

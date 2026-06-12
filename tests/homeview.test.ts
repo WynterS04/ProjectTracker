@@ -5,11 +5,12 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils';
 import HomeView from '@/views/HomeView.vue'
 import { useProjectStore } from '@/stores/ProjectStore'
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { nextTick } from 'vue'
 
 
-describe('HomeView', () => {
+describe('HomeView Testing', () => {
     beforeEach(() => {
         setActivePinia(createPinia());
     });
@@ -77,17 +78,33 @@ describe('HomeView', () => {
         await checkFilter('Complete', totals[3], 'Complete')
     });
 
-    /*
-    it('search projects', async () => {
+    /* Search */
+    it('search projects by name', async () => {
         const wrapper = mount(HomeView)
-        const store = useProjectStore()
-        render(HomeView)
-        const rows = wrapper.findAll('tbody tr')
+        const input = wrapper.get('#search-bar')
+        let rows = wrapper.findAll('tbody tr')
+        expect(rows.length).toBe(3)
 
-        const input = screen.getByRole('textbox')
-        
+        const userSearch = async (
+            typedInput: string,
+            expectedNumber: number
+        ) => {
+            await input.setValue(typedInput)
+            await nextTick()
+            rows = wrapper.findAll('tbody tr')
 
-        await userEvent.type(input, '')
-    });*/
+            expect(rows.length).toBe(expectedNumber)
+            rows.forEach((row) => {
+                const projectName = row.findAll('td')[1]
+                expect(projectName?.text()).toContain(typedInput)
+            })
+        }
+        await userSearch('Project', 2)
+
+        await userSearch('Jenkins', 1)
+
+        await userSearch('Rabbit', 0)
+
+    });
 
 });

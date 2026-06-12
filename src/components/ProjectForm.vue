@@ -53,23 +53,23 @@ const onSubmit = () => {
 <template>
             <form class="project-form" @submit.prevent="onSubmit">
                 <label for="name">Project Name<span style="color: #D71515 ;">&#8277;</span></label>
-                <input v-model="form.projectName" id="name" placeholder="Project XYZ" required>
+                <input data-test="project-name" v-model="form.projectName" id="name" placeholder="Project XYZ" required>
                 
                 <label for="owner">Owner<span style="color: #D71515;">&#8277;</span></label>
-                <input v-model="form.owner" id="owner" placeholder="John Doe" required>
+                <input data-test="owner" v-model="form.owner" id="owner" placeholder="John Doe" required>
 
                 <label for="date">Due Date<span style="color: #D71515;">&#8277;</span></label>
-                <input v-model="form.date"  id="date" type="date" required>
+                <input data-test="date" v-model="form.date"  id="date" type="date" required>
 
                 <label for="status">Status<span style="color: #D71515;">&#8277;</span></label>
-                <select v-model="form.status" id="status" required>
+                <select data-test="status" v-model="form.status" id="status" required>
                     <option>Not Started</option>
                     <option>In Progress</option>
                     <option>Complete</option>
                 </select>
 
                 <label for="description">Description<span style="color: #D71515;">&#8277;</span></label>
-                <textarea v-model="form.description" id="description" rows="4" placeholder="Enter project overview" required></textarea>
+                <textarea data-test="description" v-model="form.description" id="description" rows="4" placeholder="Enter project overview" required></textarea>
 
                 <div class="button-wrapper">
                     <input data-test="submit-button" class="button" type="submit" :value="props.buttonText">
