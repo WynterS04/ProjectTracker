@@ -4,6 +4,7 @@ import { useProjectStore } from '@/stores/ProjectStore'
 import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
 import ProjectForm from '@/components/ProjectForm.vue'
+import Sorting from './Sorting.vue'
 
 const store = useProjectStore()
 
@@ -70,7 +71,12 @@ const isOverdue = (date: string) => {
         <table class="project-table" data-test="project-table">
             <thead>
                 <tr>
-                    <th v-for=" header in headers" :key="header">{{ header }}</th>
+                    <th v-for=" header in headers" :key="header">
+                        <div class="table-header">
+                            <div class="thead-name">{{ header }} </div>
+                            <div class="thead-sort"> <Sorting /> </div>
+                        </div>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -151,12 +157,17 @@ table {
     margin: 15px 20px 8px;
     border-collapse: collapse;
 }
+.table-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 thead {
     background: #d2eaf4e7;
 }
 th, tr {
     font-size: larger;
-    padding: 20px 13px 25px;
+    padding: 20px 13px 20px;
 }
 th, td {
     border: 1px solid black;
