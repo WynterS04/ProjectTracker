@@ -58,6 +58,11 @@ function closeEditModal() {
     selectedProject.value = null
 }
 
+const isOverdue = (date: string) => {
+    return new Date(date) < new Date();
+}
+
+
 </script>
 
 <template>
@@ -74,7 +79,7 @@ function closeEditModal() {
                 <p v-if="props.project.length === 0" style="font-size:larger ;">
                         No projects listed with this status.
                 </p>
-                <tr data-test="project-row" v-else v-for="(row, index) in props.project" :key="index">
+                <tr data-test="project-row" v-else v-for="(row, index) in props.project" :key="index" :class="{overdue: isOverdue(row.date)}">
                     <td>{{ row.id }}</td>
                     <td>{{ row.project }}</td>
                     <td>{{ row.owner }}</td>
@@ -82,6 +87,7 @@ function closeEditModal() {
                     <td>{{ row.status }}</td>
                     <td colspan="2">{{ row.description }}</td>
 
+                    <div class="icons">
                     <!--confirm & delete project-->
                     <i data-test="delete-icon" class="fas fa-trash fa-lg" role="button" id="trash" @click="openDeleteModal(row)"></i>
                     <div v-if="showDeleteModal" class="modal-backdrop">
@@ -109,6 +115,7 @@ function closeEditModal() {
                                 <ProjectForm v-if="selectedProject" :project="selectedProject" action="edit" buttonText="Save Changes" @project-edited="closeEditModal"></ProjectForm>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </tr>
             </tbody>
@@ -142,22 +149,32 @@ function closeEditModal() {
 }
 table {
     margin: 15px 20px 8px;
+    border-collapse: collapse;
 }
 thead {
-    background: #e4f5fde7;
+    background: #d2eaf4e7;
 }
 th, tr {
     font-size: larger;
-    padding: 20px 7px 25px;
+    padding: 20px 13px 25px;
+}
+th, td {
+    border: 1px solid black;
+}
+.overdue td{
+    background-color: #f86664a2;
 }
 td {
-    padding: 12px;
+    padding: 20px 15px;
 }
 label {
     font-size: 23px;
 }
-#trash, #edit {
-    margin: 17px 8px 17px;
+#trash {
+    margin: 17px 18px 17px;
+}
+.icons{
+    padding: 15px 3px;
 }
 #trash:hover {
     color: rgb(243, 44, 31);
