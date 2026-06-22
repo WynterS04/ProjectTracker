@@ -5,14 +5,23 @@ import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
 import ProjectForm from '@/components/ProjectForm.vue'
 import Sorting from './Sorting.vue'
+import ToastNotification from './ToastNotification.vue'
 
 const store = useProjectStore()
-
 const props = defineProps<{
     project: Project[]
 }>()
 
-const headers = ['Id', 'Name', 'Owner', 'Date', 'Status', 'Description']
+const arrayToDisplay = ref<Project[]>([...props.project])
+
+const headers = [
+    {key: 'id', label:'Id'}, 
+    {key: 'project', label: 'Name'}, 
+    {key: 'owner', label:'Owner'}, 
+    {key: 'date', label:'Date'}, 
+    {key: 'status', label:'Status'}, 
+    {key: 'description', label:'Description'}
+] satisfies {key: keyof Project; label: string}[]
 
 const status = ref<ProjectStatus>('Not Started')
 
@@ -31,6 +40,8 @@ function closeDeleteModal() {
 function confirmDelete(id: number) {
     store.deleteProject(id)
     closeDeleteModal()
+    showToast.value = true
+    toastMessage.value = 'Project successfully deleted!'
 }
 
 /* Add Modal */
@@ -42,6 +53,8 @@ function openAddModal() {
 
 function closeAddModal() {
     showAddModal.value = false
+    showToast.value = true
+    toastMessage.value = 'New project successfully added!'
 }
 
 /* Edit Modal */
@@ -57,12 +70,32 @@ const openEditModal = (project: Project) => {
 function closeEditModal() {
     showEditModal.value = false
     selectedProject.value = null
+    showToast.value = true
+    toastMessage.value = 'Your changes saved successfully!'
 }
 
+/* Overdue Projects */
 const isOverdue = (date: string) => {
     return new Date(date) < new Date();
 }
 
+/*Toast Notification */
+const toastMessage = ref('')
+const showToast = ref(false)
+
+/* Sorting */
+function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
+    arrayToDisplay.value.sort((a,b) => {
+    const aValue = a[field]
+    const bValue = b[field]
+
+        if (typeof aValue === 'string' && typeof bValue === 'string') {
+            return direction === 'asc' ? aValue.localeCompare(bValue): bValue.localeCompare(aValue)
+        }
+
+        return direction === 'asc' ? Number(aValue) - Number(bValue): Number(bValue) - Number(aValue)
+    })
+}
 
 </script>
 
@@ -71,10 +104,10 @@ const isOverdue = (date: string) => {
         <table class="project-table" data-test="project-table">
             <thead>
                 <tr>
-                    <th v-for=" header in headers" :key="header">
+                    <th v-for=" header in headers" :key="header.key">
                         <div class="table-header">
-                            <div class="thead-name">{{ header }} </div>
-                            <div class="thead-sort"> <Sorting /> </div>
+                            <div class="thead-name">{{ header.label }} </div>
+                            <div class="thead-sort"> <Sorting :arrayToSort="arrayToDisplay" :sortBy="header.key" @sort="handleSort"/> </div>
                         </div>
                     </th>
                 </tr>
@@ -82,10 +115,10 @@ const isOverdue = (date: string) => {
             <tbody>
 
                 <!-- Display Projects -->
-                <p v-if="props.project.length === 0" style="font-size:larger ;">
+                <p v-if="arrayToDisplay.length === 0" style="font-size:larger ;">
                         No projects listed with this status.
                 </p>
-                <tr data-test="project-row" v-else v-for="(row, index) in props.project" :key="index" :class="{overdue: isOverdue(row.date)}">
+                <tr data-test="project-row" v-else v-for="(row, index) in arrayToDisplay" :key="index" :class="{overdue: isOverdue(row.date)}">
                     <td>{{ row.id }}</td>
                     <td>{{ row.project }}</td>
                     <td>{{ row.owner }}</td>
@@ -114,7 +147,7 @@ const isOverdue = (date: string) => {
                         <div data-test="edit-modal" class="project-form-container">
                             <div class="modal-header">
                             <h1>Edit Project</h1>
-                                <i data-test="cancel-button" class="fas fa-xmark" id="close" @click="closeEditModal"></i>
+                                <i data-test="cancel-button" class="fas fa-xmark" id="close" @click="showEditModal=false"></i>
                             </div>
 
                             <div class="modal-body">
@@ -136,7 +169,7 @@ const isOverdue = (date: string) => {
             <div data-test="add-modal" class="project-form-container">
                 <div class="modal-header">
                 <h1>New Project</h1>
-                    <i data-test="cancel-button" class="fas fa-xmark fa-lg" id="close" @click="closeAddModal"></i>
+                    <i data-test="cancel-button" class="fas fa-xmark fa-lg" id="close" @click="showAddModal=false"></i>
                 </div>
 
                 <div class="modal-body">
@@ -144,6 +177,7 @@ const isOverdue = (date: string) => {
                 </div>
             </div>
         </div>
+        <ToastNotification @closeToast="showToast=false" :message="toastMessage" :showToast="showToast"></ToastNotification>
   </div>
 
 </template>
@@ -154,8 +188,9 @@ const isOverdue = (date: string) => {
     padding: 0px 50px 10px;
 }
 table {
-    margin: 15px 20px 8px;
+    margin: 25px 20px 15px;
     border-collapse: collapse;
+    width: 95%;
 }
 .table-header {
     display: flex;
@@ -173,7 +208,7 @@ th, td {
     border: 1px solid black;
 }
 .overdue td{
-    background-color: #f86664a2;
+    background-color: #f59593a2;
 }
 td {
     padding: 20px 15px;
@@ -237,17 +272,24 @@ button.danger {
 .add-project-button {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     width:fit-content;
+    color: black;
     border-radius: 8px;
+    margin: 25px 0px 0px 20px;
+}
+.add-project-button p {
+    margin: 13px 12px;
+    font-size: 18px;
+}
+#add {
+    margin: 24px 0px 10px 15px;
 }
 .add-project-button:hover  {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     transform: translateY(-5px) scale(1.03);
     color: #233CCA;
-}
-#add {
-    margin: 26px 20px 20px;
-    margin-right:10px ;
+    cursor: pointer;
 }
 .project-form-container {
     background: white;

@@ -3,6 +3,7 @@ import { reactive } from 'vue'
 import { useProjectStore } from '@/stores/ProjectStore'
 import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
+import ToastNotification from './ToastNotification.vue'
 
 const emit = defineEmits(['project-submitted', 'project-edited'])
 

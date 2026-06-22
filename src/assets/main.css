@@ -2,7 +2,9 @@ body {
     margin: 0;
     background: #e4f5fde7;
 }
-
+button:hover , i:hover, input:hover{
+    cursor: pointer;
+}
 tr {
     text-align: left;
 }
@@ -21,6 +23,7 @@ th, td {
 .nav-bar {
   background: #067DB7;
   height: 100px;
+  padding-bottom: 18px;
   margin: 0px 0px 35px;
   -webkit-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
   -moz-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
@@ -29,7 +32,7 @@ th, td {
 
 .nav-bar h1 {
     margin: 0px;
-    padding: 20px 30px 0px;
+    padding: 30px 30px 0px;
     color: white;
     font-size: 48px;
 }

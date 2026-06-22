@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import  { ref, watch } from 'vue'
 import ProjectList from '@/components/ProjectList.vue'
+import ProjectForm from '@/components/ProjectForm.vue'
 import DisplaySummary from '@/components/DisplaySummary.vue'
 import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
 import { useProjectStore } from '@/stores/ProjectStore'
+import ToastNotification from '@/components/ToastNotification.vue'
 
 const viewType = ref('all')
 
@@ -22,6 +24,7 @@ watch(status, (newStatus) => {
 })
 
 const searchTerm = ref('')
+
 </script>
 
 <template>
