@@ -26,8 +26,8 @@ function sortDescending () {
 </script>
 <template>
     <div class="sort-actions">
-        <div class="ascend" @click="sortAscending">&#9650;</div>
-        <div class="descend" @click="sortDescending" >&#9660;</div>
+        <div data-test="ascend" class="ascend" @click="sortAscending">&#9650;</div>
+        <div data-test="descend" class="descend" @click="sortDescending" >&#9660;</div>
     </div>
 </template>
 <style>

@@ -19,7 +19,7 @@ const closeToast = () => {
 <template>
     <div v-if="notifs.showToast" class="toast-container">
         <!--New project added-->
-        <div class="toast-content">
+        <div data-test="toast-notif" class="toast-content">
             <div class="toast-icon">
                 <i id="check" class="fas fa-check-circle" style="color: rgb(116, 192, 252);"></i>
             </div>

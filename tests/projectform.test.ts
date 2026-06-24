@@ -21,7 +21,6 @@ describe('Project Form Validation Testing', () => {
     it('valid input', async () => {
         const wrapper = mount(ProjectForm)
         const input = wrapper.find('input')
-        const store = useProjectStore()
 
         const setInput = async (
             expectedData: string,

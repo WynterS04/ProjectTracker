@@ -68,14 +68,14 @@ const searchTerm = ref('')
             <ProjectList :project="arrayToDisplay" v-if="viewType === 'all'"></ProjectList>
 
             <DisplaySummary v-if="viewType === 'summary'"></DisplaySummary>
-        </div>    
+        </div>
     </div>
 
 </template>
 
 <style>
 .page-wrapper h1 {
-    font-size: 40px;
+    font-size: 45px;
     padding-left: 30px;
 }
 .page-wrapper {
@@ -89,7 +89,7 @@ const searchTerm = ref('')
 }
 .projectlist-wrapper {
     background: white;
-    padding: 10px 30px 20px;
+    padding: 20px 30px 25px;
     margin-top: 0px;
     border-radius: 5px;
 }
@@ -130,6 +130,9 @@ select {
     position: relative;
     top: 0px;
     font-size: medium;
+}
+.status-filter select:hover {
+    cursor: pointer;
 }
 .search-project {
     display:flex;

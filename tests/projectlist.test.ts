@@ -6,6 +6,7 @@ import { mount } from '@vue/test-utils';
 import ProjectList from '@/components/ProjectList.vue';
 import { useProjectStore } from '@/stores/ProjectStore'
 import type { Project } from '@/stores/ProjectStore';
+import ProjectForm from '@/components/ProjectForm.vue';
 
 describe('Project List Testing', () => {
     beforeEach(() => {
@@ -96,7 +97,7 @@ describe('Project List Testing', () => {
         expect(projects[projects.findIndex(p => p.id === 1)]?.status).toBe('Complete')
     });
 
-    it('add project works', async () => {
+    it('add project functionality works', async () => {
         const wrapper = mount(ProjectList, {
             props: {
             project: [
@@ -115,5 +116,23 @@ describe('Project List Testing', () => {
         store.addProject(newProject)
         expect(store.projects.length).toBe(4)
         expect(store.projects[3]?.id).toBe(4)
+    });
+
+    it('overdue projects are highlighted', async () => {
+        const wrapper = mount(ProjectList, {
+            props: {
+                project: [
+                    {id: 1, project: 'Project Tracker', owner: 'Wynter Stroman', status: 'Complete', date: '2026-06-15', description: 'Building web app to track team projects'},
+                    {id: 2, project: 'Jenkins Pipeline', owner: 'Wynter Stroman', status: 'Not Started', date: '2026-06-30', description: 'Automate tasks after code is pushed'},
+                    {id: 3, project: 'Project Tracker', owner: 'Minna Azeem', status: 'In Progress', date: '2026-06-15', description: 'Building web app to track team projects'}
+                ]
+            }
+        })
+
+        const projectRows = wrapper.findAll('tbody tr')
+
+        //class should be overdue
+        expect(projectRows[0]?.classes()).toContain('overdue')
+        expect(projectRows[2]?.classes()).toContain('overdue')
     });
 })

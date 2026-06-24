@@ -16,8 +16,8 @@ export const useProjectStore = defineStore('project', {
     state: () => ({
         projects: [
             {id: 1, project: 'Project Tracker', owner: 'Wynter Stroman', status: 'Complete', date: '2026-06-15', description: 'Building web app to track team projects'},
-            {id: 2, project: 'Project Tracker', owner: 'Minna Azeem', status: 'In Progress', date: '2026-06-15', description: 'Building web app to track team projects'},
-            {id: 3, project: 'Jenkins Pipeline', owner: 'Wynter Stroman', status: 'Not Started', date: '2026-06-23', description: 'Automate tasks after code is pushed'}
+            {id: 2, project: 'Jenkins Pipeline', owner: 'Wynter Stroman', status: 'Not Started', date: '2026-06-30', description: 'Automate tasks after code is pushed'},
+            {id: 3, project: 'Project Tracker', owner: 'Minna Azeem', status: 'In Progress', date: '2026-06-15', description: 'Building web app to track team projects'}
         ] as Project[]
     }),
     getters: {

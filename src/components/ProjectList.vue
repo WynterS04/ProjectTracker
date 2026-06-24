@@ -12,14 +12,12 @@ const props = defineProps<{
     project: Project[]
 }>()
 
-const arrayToDisplay = ref<Project[]>([...props.project])
-
 const headers = [
-    {key: 'id', label:'Id'}, 
-    {key: 'project', label: 'Name'}, 
-    {key: 'owner', label:'Owner'}, 
-    {key: 'date', label:'Date'}, 
-    {key: 'status', label:'Status'}, 
+    {key: 'id', label:'Id'},
+    {key: 'project', label: 'Name'},
+    {key: 'owner', label:'Owner'},
+    {key: 'date', label:'Date'},
+    {key: 'status', label:'Status'},
     {key: 'description', label:'Description'}
 ] satisfies {key: keyof Project; label: string}[]
 
@@ -54,7 +52,7 @@ function openAddModal() {
 function closeAddModal() {
     showAddModal.value = false
     showToast.value = true
-    toastMessage.value = 'New project successfully added!'
+    toastMessage.value = 'New project added successfully!'
 }
 
 /* Edit Modal */
@@ -71,7 +69,7 @@ function closeEditModal() {
     showEditModal.value = false
     selectedProject.value = null
     showToast.value = true
-    toastMessage.value = 'Your changes saved successfully!'
+    toastMessage.value = 'Your changes have been saved!'
 }
 
 /* Overdue Projects */
@@ -85,7 +83,7 @@ const showToast = ref(false)
 
 /* Sorting */
 function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
-    arrayToDisplay.value.sort((a,b) => {
+    props.project.sort((a,b) => {
     const aValue = a[field]
     const bValue = b[field]
 
@@ -107,7 +105,7 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
                     <th v-for=" header in headers" :key="header.key">
                         <div class="table-header">
                             <div class="thead-name">{{ header.label }} </div>
-                            <div class="thead-sort"> <Sorting :arrayToSort="arrayToDisplay" :sortBy="header.key" @sort="handleSort"/> </div>
+                            <div class="thead-sort"> <Sorting :arrayToSort="props.project" :sortBy="header.key" @sort="handleSort"/> </div>
                         </div>
                     </th>
                 </tr>
@@ -115,14 +113,14 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
             <tbody>
 
                 <!-- Display Projects -->
-                <p v-if="arrayToDisplay.length === 0" style="font-size:larger ;">
+                <p v-if="props.project.length === 0" style="font-size:larger ;">
                         No projects listed with this status.
                 </p>
-                <tr data-test="project-row" v-else v-for="(row, index) in arrayToDisplay" :key="index" :class="{overdue: isOverdue(row.date)}">
+                <tr data-test="project-row" v-else v-for="(row, index) in props.project" :key="index" :class="{overdue: isOverdue(row.date)}">
                     <td>{{ row.id }}</td>
                     <td>{{ row.project }}</td>
                     <td>{{ row.owner }}</td>
-                    <td>{{ row.date }}</td>
+                    <td data-test="date">{{ row.date }}</td>
                     <td>{{ row.status }}</td>
                     <td colspan="2">{{ row.description }}</td>
 
@@ -184,7 +182,7 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
 
 <style>
 .modal-header h1 {
-    font-size: 48px; 
+    font-size: 48px;
     padding: 0px 50px 10px;
 }
 table {
@@ -208,7 +206,7 @@ th, td {
     border: 1px solid black;
 }
 .overdue td{
-    background-color: #f59593a2;
+    background-color: #fca6a5a2;
 }
 td {
     padding: 20px 15px;
@@ -220,7 +218,7 @@ label {
     margin: 17px 18px 17px;
 }
 .icons{
-    padding: 15px 3px;
+    padding: 15px 3px 10px 0px;
 }
 #trash:hover {
     color: rgb(243, 44, 31);

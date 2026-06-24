@@ -55,7 +55,7 @@ const onSubmit = () => {
             <form class="project-form" @submit.prevent="onSubmit">
                 <label for="name">Project Name<span style="color: #D71515 ;">&#8277;</span></label>
                 <input data-test="project-name" v-model="form.projectName" id="name" placeholder="Project XYZ" required>
-                
+
                 <label for="owner">Owner<span style="color: #D71515;">&#8277;</span></label>
                 <input data-test="owner" v-model="form.owner" id="owner" placeholder="John Doe" required>
 
