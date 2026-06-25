@@ -33,7 +33,7 @@ describe('Project Form Validation Testing', () => {
             expect((data.element as HTMLInputElement).value).toBe(expectedInput)
         }
         /* Project Name */
-        await setInput('project-name','Project XYZ')
+        await setInput('name','Project XYZ')
 
         /* Owner */
         await setInput('owner','Wynter')

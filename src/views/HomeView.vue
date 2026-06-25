@@ -16,11 +16,12 @@ const arrayToDisplay = ref<Project[]>(store.projects)
 
 const status = ref<ProjectStatus>()
 
+    /* Watches for change in status filtering */
 watch(status, (newStatus) => {
-    if(newStatus === null) {
+    if(newStatus === null) {            //if All is selected from dropdown then returns original array
         arrayToDisplay.value = store.projects
     }
-    arrayToDisplay.value = newStatus ? store.filterByStatus(newStatus) : store.projects
+    arrayToDisplay.value = newStatus ? store.filterByStatus(newStatus) : store.projects //use filter method in pinia store
 })
 
 const searchTerm = ref('')
@@ -36,6 +37,8 @@ const searchTerm = ref('')
         <h1>Projects</h1>
         <div class="top-bar">
             <div class="project-view">
+
+                <!--Separate view buttons -->
                 <button data-test="all-projects-button" @click="viewType = 'all';">All Projects</button>
                 <button data-test="project-summary-button" @click="viewType = 'summary';">Summary</button>
             </div>
@@ -65,6 +68,7 @@ const searchTerm = ref('')
 
         <div class="projectlist-wrapper">
 
+            <!--Project Views Implementation-->
             <ProjectList :project="arrayToDisplay" v-if="viewType === 'all'"></ProjectList>
 
             <DisplaySummary v-if="viewType === 'summary'"></DisplaySummary>

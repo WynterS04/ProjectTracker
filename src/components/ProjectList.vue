@@ -114,7 +114,7 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
 
                 <!-- Display Projects -->
                 <p v-if="props.project.length === 0" style="font-size:larger ;">
-                        No projects listed with this status.
+                        No projects listed.
                 </p>
                 <tr data-test="project-row" v-else v-for="(row, index) in props.project" :key="index" :class="{overdue: isOverdue(row.date)}">
                     <td>{{ row.id }}</td>
@@ -134,7 +134,7 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
 
                             <div class="modal-actions">
                                 <button data-test="cancel-button" @click="closeDeleteModal">Cancel</button>
-                                <button data-test="delete-button" class="danger" @click="confirmDelete(row.id)">Delete</button>
+                                <button data-test="delete-button" class="danger" @click="selectedProject && confirmDelete(selectedProject.id)">Delete</button>
                             </div>
                         </div>
                     </div>

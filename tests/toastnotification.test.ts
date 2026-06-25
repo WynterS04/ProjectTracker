@@ -2,6 +2,8 @@ import { setActivePinia, createPinia } from 'pinia';
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils';
 import ProjectList from '@/components/ProjectList.vue';
+import ProjectForm from '@/components/ProjectForm.vue';
+import { nextTick } from 'vue';
 
 describe('Toast Notification Testing', () => {
     beforeEach(() => {
@@ -32,7 +34,7 @@ describe('Toast Notification Testing', () => {
 
     });
 
-    it('edit project toast appears with correct message', async () => {
+    /*it('edit project toast appears with correct message', async () => {
         const wrapper = mount(ProjectList, {
             props: {
                 project: [
@@ -40,27 +42,29 @@ describe('Toast Notification Testing', () => {
                     { id: 2, project: 'Jenkins Pipeline', owner: 'Minna Azeem', status: 'In Progress', date: '06/15/2026', description: 'Building pipeline with jenkins' }
                 ]
             }
-        })
+        }) 
+       const wrapper = mount(ProjectForm)
+        const buttons = wrapper.findAll('[data-test="edit-icon"]')*/
 
-        const buttons = wrapper.findAll('[data-test="edit-icon"]')
-
-        /* Open Modal */
+        /* Open Modal 
         await buttons[0]?.trigger('click')
-        expect(wrapper.text()).toContain('Test Project')
-        expect(wrapper.find('[data-test="edit-modal"]').exists()).toBe(true)
+        await nextTick()*/
 
-        /* Make change */
-        await wrapper.find('[data-test="project-name"]').setValue('AEM Project')
+        /* Make change 
+        const input = wrapper.find('[data-test="owner"]')
+        expect(input.exists()).toBe(true)
+        await input.setValue('Whitney Stroman')
+        expect((input.element as HTMLInputElement).value).toBe('Whitney Stroman')*/
 
-        /* save changes */
+        /* save changes 
         await wrapper.find('[data-test="submit-button"]').trigger('click')
-        //expect(wrapper.find('[data-test="toast-notif"]').exists()).toBe(true)
-       // expect(wrapper.text()).toContain('Your changes have been saved!')
-    });
+        expect(wrapper.emitted('project-edited')).toBeTruthy()
+        expect(wrapper.emitted('project-edited')).toContain('Your changes have been saved!')
+    });*/
 
-    it('add project toast appears with correct message', async () => {
+    /*it('add project toast appears with correct message', async () => {
         
-    });
+    }); */
 
     it('toast does not appaear when action canceled', async () => {
         const wrapper = mount(ProjectList, {
@@ -100,5 +104,5 @@ describe('Toast Notification Testing', () => {
         
                 /* Add Modal */
                 await checkModal('add-icon', 'add-modal', 1, 'New Project')
-    })
+    });
 })

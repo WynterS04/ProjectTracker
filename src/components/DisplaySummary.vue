@@ -141,7 +141,7 @@ const activeItem = computed(() =>
       <div class="legend">
         <div v-for="item in summaryItems" :key="item.status" class="legend-item">
           <span class="dot" :style="{ backgroundColor: item.color }"></span>
-          <p>{{ item.status }} - {{ item.total }}</p>
+          <p style="font-size: x-large;">{{ item.status }} - {{ item.total }}</p>
         </div>
       </div>
     </div>
