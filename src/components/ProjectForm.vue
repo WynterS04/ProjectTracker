@@ -23,7 +23,7 @@ const form = reactive({
   description: props.project?.description ?? ''
 })
 
-const onSubmit = () => {
+function onSubmit() {
     const newProject: Project = {
         id: props.project?.id ?? 0,
         project: form.projectName,
@@ -53,27 +53,27 @@ const onSubmit = () => {
 
 <template>
             <form class="project-form" @submit.prevent="onSubmit">
-                <label for="name">Project Name<span style="color: #D71515 ;">&#8277;</span></label>
+                <label for="name">Project Name<span class="required" aria-label="required">&#8277</span></label>
                 <input data-test="name" v-model="form.projectName" id="name" placeholder="Project XYZ" required>
 
-                <label for="owner">Owner<span style="color: #D71515;">&#8277;</span></label>
+                <label for="owner">Owner<span class="required" aria-label="required">&#8277</span></label>
                 <input data-test="owner" v-model="form.owner" id="owner" placeholder="John Doe" required>
 
-                <label for="date">Due Date<span style="color: #D71515;">&#8277;</span></label>
+                <label for="date">Due Date<span class="required" aria-label="required">&#8277</span></label>
                 <input data-test="date" v-model="form.date"  id="date" type="date" required>
 
-                <label for="status">Status<span style="color: #D71515;">&#8277;</span></label>
+                <label for="status">Status<span class="required" aria-label="required">&#8277</span></label>
                 <select data-test="status" v-model="form.status" id="status" required>
                     <option>Not Started</option>
                     <option>In Progress</option>
                     <option>Complete</option>
                 </select>
 
-                <label for="description">Description<span style="color: #D71515;">&#8277;</span></label>
+                <label for="description">Description<span class="required" aria-label="required">&#8277</span></label>
                 <textarea data-test="description" v-model="form.description" id="description" rows="4" placeholder="Enter project overview" required></textarea>
 
                 <div class="button-wrapper">
-                    <input data-test="submit-button" class="button" type="submit" :value="props.buttonText">
+                    <input data-test="submit-button" class="button" type="submit" :value="props.buttonText" aria-label="submit">
                 </div>
             </form>
 </template>
@@ -87,6 +87,9 @@ label{
     margin: 0px 50px;
     font-weight: bold;
     font-size: large;
+}
+.required {
+    color: #D71515;
 }
 input, select, textarea{
     display: block;

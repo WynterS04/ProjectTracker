@@ -23,15 +23,15 @@ export const useProjectStore = defineStore('project', {
     getters: {
         filterByStatus(state) {
              return (status: ProjectStatus)  => {
-                return state.projects.filter(project => project.status === status)     //uses .filter array method to return arary of projects w/ given status
+                return state.projects.filter(project => project.status === status)
             }
         },
         searchByName(state) {
             return(name: String) => {
-                return state.projects.filter(project => project.project.toLowerCase().includes(name.toLowerCase()))  //uses project name to filter array
+                return state.projects.filter(project => project.project.toLowerCase().includes(name.toLowerCase()))
             }
         },
-        summmarizeProjects(state) {                                                                            //counts projects and each one with a given status
+        summmarizeProjects(state) {
             let totalNotStarted = 0, totalInProgress = 0, totalCompleted = 0;
 
             for(let project of this.projects) {
@@ -50,19 +50,19 @@ export const useProjectStore = defineStore('project', {
     actions: {
         addProject(newProject: Project) {
             newProject.id = this.projects.length + 1
-            this.projects.push(newProject)                      //pushes new project to end of array
+            this.projects.push(newProject)
         },
         deleteProject(id: number) {
-            let index = this.projects.findIndex(p => p.id === id)         //finds project to remove
+            let index = this.projects.findIndex(p => p.id === id)
             console.log(index)
-            let removed = this.projects.splice(index, 1)                  //removes it with splice
+            let removed = this.projects.splice(index, 1)
             console.log(removed)
         },
         updateProject(updatedProject: Project, id: number) {
-            let index = this.projects.findIndex(p => p.id === id)           //finds project to edit
+            let index = this.projects.findIndex(p => p.id === id)
 
             if(index !== -1){
-                this.projects[index] = updatedProject                      //replaces with new project
+                this.projects[index] = updatedProject
             }
         }
     }

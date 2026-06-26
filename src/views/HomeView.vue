@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import  { ref, watch } from 'vue'
 import ProjectList from '@/components/ProjectList.vue'
-import ProjectForm from '@/components/ProjectForm.vue'
 import DisplaySummary from '@/components/DisplaySummary.vue'
 import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
 import { useProjectStore } from '@/stores/ProjectStore'
-import ToastNotification from '@/components/ToastNotification.vue'
 
 const viewType = ref('all')
 
@@ -16,12 +14,11 @@ const arrayToDisplay = ref<Project[]>(store.projects)
 
 const status = ref<ProjectStatus>()
 
-    /* Watches for change in status filtering */
 watch(status, (newStatus) => {
-    if(newStatus === null) {            //if All is selected from dropdown then returns original array
+    if(newStatus === null) {
         arrayToDisplay.value = store.projects
     }
-    arrayToDisplay.value = newStatus ? store.filterByStatus(newStatus) : store.projects //use filter method in pinia store
+    arrayToDisplay.value = newStatus ? store.filterByStatus(newStatus) : store.projects
 })
 
 const searchTerm = ref('')
@@ -32,7 +29,7 @@ const searchTerm = ref('')
     <div class="nav-bar">
         <h1>BCBS Project Tracker</h1>
     </div>
-    
+
     <div class="page-wrapper">
         <h1>Projects</h1>
         <div class="top-bar">

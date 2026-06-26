@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useProjectStore } from '@/stores/ProjectStore'
 import type { Project } from '@/stores/ProjectStore'
 import type { ProjectStatus } from '@/stores/ProjectStore'
@@ -60,7 +60,7 @@ const showEditModal = ref(false)
 
 const selectedProject = ref<Project | null>(null)
 
-const openEditModal = (project: Project) => {
+function openEditModal (project: Project) {
   selectedProject.value = project
   showEditModal.value = true
 }
@@ -73,8 +73,18 @@ function closeEditModal() {
 }
 
 /* Overdue Projects */
-const isOverdue = (date: string) => {
-    return new Date(date) < new Date();
+const now = ref(new Date())
+const oneHour = 60 * 60 * 1000
+
+//updates date every hour
+onMounted(() => {
+  setInterval(() => {
+    now.value = new Date()
+  }, oneHour)
+})
+
+function isOverdue(date: string, status: ProjectStatus) {
+    return new Date(date) < now.value && status !== 'Complete'
 }
 
 /*Toast Notification */
@@ -99,7 +109,10 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
 
 <template>
     <div class="all-projects">
-        <table class="project-table" data-test="project-table">
+        <p v-if="props.project.length === 0" class="no-projects">
+            No projects listed.
+        </p>
+        <table v-else class="project-table" data-test="project-table">
             <thead>
                 <tr>
                     <th v-for=" header in headers" :key="header.key">
@@ -113,10 +126,11 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
             <tbody>
 
                 <!-- Display Projects -->
-                <p v-if="props.project.length === 0" style="font-size:larger ;">
-                        No projects listed.
-                </p>
-                <tr data-test="project-row" v-else v-for="(row, index) in props.project" :key="index" :class="{overdue: isOverdue(row.date)}">
+                <tr data-test="project-row"
+                v-for="(row, index) in props.project"
+                :key="index"
+                :class="{overdue: isOverdue(row.date, row.status)}"
+                >
                     <td>{{ row.id }}</td>
                     <td>{{ row.project }}</td>
                     <td>{{ row.owner }}</td>
@@ -126,48 +140,67 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
 
                     <div class="icons">
                     <!--confirm & delete project-->
-                    <i data-test="delete-icon" class="fas fa-trash fa-lg" role="button" id="trash" @click="openDeleteModal(row)"></i>
-                    <div v-if="showDeleteModal" class="modal-backdrop">
-                        <div data-test="delete-modal" class="modal">
-                            <h3>Delete Confirmation</h3>
-                            <p>Are you sure you want to remove the "<strong>{{ selectedProject?.project }}</strong>" project?</p>
+                    <div class="trash">
+                        <button class="trash-button" type="button" aria-label="Delete" @click="openDeleteModal(row)">
+                            <i id="trash-icon" data-test="delete-icon" class="fas fa-trash fa-lg" role="button"></i>
+                        </button>
+                        <div v-if="showDeleteModal" class="modal-backdrop">
+                            <div data-test="delete-modal" class="modal">
+                                <h3>Delete Confirmation</h3>
+                                <p>Are you sure you want to remove the "<strong>{{ selectedProject?.project }}</strong>" project?</p>
 
-                            <div class="modal-actions">
-                                <button data-test="cancel-button" @click="closeDeleteModal">Cancel</button>
-                                <button data-test="delete-button" class="danger" @click="selectedProject && confirmDelete(selectedProject.id)">Delete</button>
+                                <div class="modal-actions">
+                                    <button data-test="cancel-button" @click="closeDeleteModal">Cancel</button>
+                                    <button data-test="delete-button" class="danger" @click="selectedProject && confirmDelete(selectedProject.id)">Delete</button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!--edit project-->
-                    <i data-test="edit-icon" class="fa-solid fa-pen-to-square fa-lg" id="edit" @click="openEditModal(row)"></i>
-                    <div v-if="showEditModal" class="modal-backdrop">
-                        <div data-test="edit-modal" class="project-form-container">
-                            <div class="modal-header">
-                            <h1>Edit Project</h1>
-                                <i data-test="cancel-button" class="fas fa-xmark" id="close" @click="showEditModal=false"></i>
-                            </div>
+                    <div class="edit">
+                        <button class="edit-button" type="button" aria-label="Edit" @click="openEditModal(row)">
+                        <i data-test="edit-icon" class="fa-solid fa-pen-to-square fa-lg" id="edit-icon" ></i>
+                        </button>
+                        <div v-if="showEditModal" class="modal-backdrop">
+                            <div data-test="edit-modal" class="project-form-container">
+                                <div class="modal-header">
+                                <h1>Edit Project</h1>
+                                    <button class="close-button" type="button" aria-label="close" @click="showEditModal=false">
+                                        <i data-test="cancel-button" class="fas fa-xmark" id="close-icon"></i>
+                                    </button>
+                                </div>
 
-                            <div class="modal-body">
-                                <ProjectForm v-if="selectedProject" :project="selectedProject" action="edit" buttonText="Save Changes" @project-edited="closeEditModal"></ProjectForm>
+                                <div class="modal-body">
+                                    <ProjectForm v-if="selectedProject" :project="selectedProject" action="edit" buttonText="Save Changes" @project-edited="closeEditModal"></ProjectForm>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                     </div>
                 </tr>
             </tbody>
         </table>
 
         <!--add project-->
-        <div class="add-project-button" @click="openAddModal">
-            <i data-test="add-icon" class="far fa-plus-square fa-lg" id="add"></i>
-            <p>Add Project</p>
+        <div class="add-project" >
+            <button type="button" aria-label="Add Project" class="add-project-button" @click="openAddModal">
+                <div class="add-icon">
+                    <i data-test="add-icon" class="far fa-plus-square fa-lg" id="add"></i>
+                </div>
+                <div class="add-text">
+                    <p>Add Project</p>
+                </div>
+            </button>
         </div>
         <div v-if="showAddModal" class="modal-backdrop">
             <div data-test="add-modal" class="project-form-container">
                 <div class="modal-header">
                 <h1>New Project</h1>
-                    <i data-test="cancel-button" class="fas fa-xmark fa-lg" id="close" @click="showAddModal=false"></i>
+                    <button class="close-button" type="button" aria-label="close" @click="showAddModal=false">
+                        <i data-test="cancel-button" class="fas fa-xmark fa-lg" id="close-icon"></i>
+                    </button>
                 </div>
 
                 <div class="modal-body">
@@ -184,6 +217,9 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
 .modal-header h1 {
     font-size: 48px;
     padding: 0px 50px 10px;
+}
+.no-projects {
+    font-size: larger;
 }
 table {
     margin: 25px 20px 15px;
@@ -214,16 +250,28 @@ td {
 label {
     font-size: 23px;
 }
-#trash {
+.trash-button {
     margin: 17px 18px 17px;
+    padding: 0px;
+    background-color: transparent;
+    border: none;
 }
-.icons{
-    padding: 15px 3px 10px 0px;
+.trash-button:hover{
+    background-color: transparent;
 }
-#trash:hover {
+#trash-icon:hover {
     color: rgb(243, 44, 31);
 }
-#edit:hover {
+.edit-button {
+    margin: 17px 18px 17px;
+    padding: 0px;
+    background-color: transparent;
+    border: none;
+}
+.edit-button:hover{
+    background-color: transparent;
+}
+#edit-icon:hover {
     color: #00A86B
 }
 .modal-backdrop {
@@ -270,24 +318,28 @@ button.danger {
 .add-project-button {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-around;
     width:fit-content;
     color: black;
+    background-color: transparent;
+    border: none;
     border-radius: 8px;
-    margin: 25px 0px 0px 20px;
+    margin: 28px 0px 0px 20px;
 }
-.add-project-button p {
+.add-text p{
     margin: 13px 12px;
-    font-size: 18px;
+    font-size: 120%;
 }
 #add {
-    margin: 24px 0px 10px 15px;
+    font-size: 150%;
+    margin: 21px 0px 10px 14px;
 }
 .add-project-button:hover  {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     transform: translateY(-5px) scale(1.03);
-    color: #233CCA;
     cursor: pointer;
+    background-color: transparent;
+    color: #233CCA;
 }
 .project-form-container {
     background: white;
@@ -306,12 +358,20 @@ button.danger {
     align-items: flex-start;
     justify-content: space-between;
 }
-#close {
+.close-button {
     position: relative;
     left: -70px;
     top: 40px;
+    background-color: transparent;
+    border: none;
 }
-#close:hover {
+.close-button:hover{
+    background-color: transparent;
+}
+#close-icon {
+    font-size: large;
+}
+#close-icon:hover {
     color: rgba(99, 98, 98, 0.416);
 }
 .modal-body {

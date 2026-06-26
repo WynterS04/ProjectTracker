@@ -13,8 +13,6 @@ const props = defineProps<{
     sortBy: keyof Project
 }>()
 
-const arrayToDisplay = ref<Project[]>(store.projects)
-
 function sortAscending () {
     emit('sort', props.sortBy, 'asc')
 }
@@ -26,8 +24,12 @@ function sortDescending () {
 </script>
 <template>
     <div class="sort-actions">
-        <div data-test="ascend" class="ascend" @click="sortAscending">&#9650;</div>
-        <div data-test="descend" class="descend" @click="sortDescending" >&#9660;</div>
+        <div data-test="ascend" class="ascend" @click="sortAscending">
+            <span :aria-label="`Sort ${props.sortBy} Ascending`">&#9650</span>
+        </div>
+        <div data-test="descend" class="descend" @click="sortDescending" >
+            <span :aria-label="`Sort ${props.sortBy} Descending`">&#9660</span>
+        </div>
     </div>
 </template>
 <style>
