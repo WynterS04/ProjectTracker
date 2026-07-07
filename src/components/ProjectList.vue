@@ -131,7 +131,7 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
                 :key="index"
                 :class="{overdue: isOverdue(row.date, row.status)}"
                 >
-                    <td>{{ row.id }}</td>
+                    <td class="id-column">{{ row.id }}</td>
                     <td>{{ row.project }}</td>
                     <td>{{ row.owner }}</td>
                     <td data-test="date">{{ row.date }}</td>
@@ -142,7 +142,7 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
                     <!--confirm & delete project-->
                     <div class="trash">
                         <button class="trash-button" type="button" aria-label="Delete" @click="openDeleteModal(row)">
-                            <i id="trash-icon" data-test="delete-icon" class="fas fa-trash fa-lg" role="button"></i>
+                            <i id="trash-icon" data-test="delete-icon" class="fas fa-trash fa-lg" aria-hidden="true"></i>
                         </button>
                         <div v-if="showDeleteModal" class="modal-backdrop">
                             <div data-test="delete-modal" class="modal">
@@ -160,14 +160,14 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
                     <!--edit project-->
                     <div class="edit">
                         <button class="edit-button" type="button" aria-label="Edit" @click="openEditModal(row)">
-                        <i data-test="edit-icon" class="fa-solid fa-pen-to-square fa-lg" id="edit-icon" ></i>
+                        <i data-test="edit-icon" class="fa-solid fa-pen-to-square fa-lg" id="edit-icon" aria-hidden="true"></i>
                         </button>
                         <div v-if="showEditModal" class="modal-backdrop">
                             <div data-test="edit-modal" class="project-form-container">
                                 <div class="modal-header">
                                 <h1>Edit Project</h1>
                                     <button class="close-button" type="button" aria-label="close" @click="showEditModal=false">
-                                        <i data-test="cancel-button" class="fas fa-xmark" id="close-icon"></i>
+                                        <i data-test="cancel-button" class="fas fa-xmark" id="close-icon" aria-hidden="true"></i>
                                     </button>
                                 </div>
 
@@ -187,7 +187,7 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
         <div class="add-project" >
             <button type="button" aria-label="Add Project" class="add-project-button" @click="openAddModal">
                 <div class="add-icon">
-                    <i data-test="add-icon" class="far fa-plus-square fa-lg" id="add"></i>
+                    <i data-test="add-icon" class="far fa-plus-square fa-lg" id="add" aria-hidden="true"></i>
                 </div>
                 <div class="add-text">
                     <p>Add Project</p>
@@ -199,7 +199,7 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
                 <div class="modal-header">
                 <h1>New Project</h1>
                     <button class="close-button" type="button" aria-label="close" @click="showAddModal=false">
-                        <i data-test="cancel-button" class="fas fa-xmark fa-lg" id="close-icon"></i>
+                        <i data-test="cancel-button" class="fas fa-xmark fa-lg" id="close-icon" aria-hidden="true"></i>
                     </button>
                 </div>
 
@@ -222,9 +222,9 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
     font-size: larger;
 }
 table {
-    margin: 25px 20px 15px;
     border-collapse: collapse;
-    width: 95%;
+    width: 79vw;
+    margin: 1% 3.5%;
 }
 .table-header {
     display: flex;
@@ -234,9 +234,12 @@ table {
 thead {
     background: #d2eaf4e7;
 }
-th, tr {
-    font-size: larger;
-    padding: 20px 13px 20px;
+th {
+    font-size: clamp(0.8rem, 2vw, 1.5rem);
+    padding: 1rem 0.7rem 1rem;
+}
+tr {
+    font-size: clamp(0.8rem, 2vw, 1.2rem);
 }
 th, td {
     border: 1px solid black;
@@ -245,10 +248,14 @@ th, td {
     background-color: #fca6a5a2;
 }
 td {
-    padding: 20px 15px;
+    padding: 0.8rem 0.9rem;
 }
 label {
-    font-size: 23px;
+    font-size: 1.5rem;
+}
+.id-column {
+    text-align: center;
+    padding: 0px !important;
 }
 .trash-button {
     margin: 17px 18px 17px;
@@ -324,15 +331,14 @@ button.danger {
     background-color: transparent;
     border: none;
     border-radius: 8px;
-    margin: 28px 0px 0px 20px;
+    margin: 1% 2.5%;
 }
 .add-text p{
-    margin: 13px 12px;
-    font-size: 120%;
+    font-size: clamp( 0.5rem, 2vw, 1rem);
 }
 #add {
-    font-size: 150%;
-    margin: 21px 0px 10px 14px;
+    font-size: clamp( 0.5rem, 2vw, 1.3rem);
+    margin: 1.5rem 0.8rem;
 }
 .add-project-button:hover  {
     transition: transform 0.3s ease, box-shadow 0.3s ease;

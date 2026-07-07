@@ -30,7 +30,7 @@ const searchTerm = ref('')
         <h1>BCBS Project Tracker</h1>
     </div>
 
-    <div class="page-wrapper">
+    <div class="page-wrapper" role="main">
         <h1>Projects</h1>
         <div class="top-bar">
             <div class="project-view">
@@ -44,7 +44,7 @@ const searchTerm = ref('')
                 <!-- Filtering By Status -->
                 <form class="status-filter">
                     <label>Status Filtering</label>
-                    <select data-test="status-select" v-model="status">
+                    <select aria-label="Status" data-test="status-select" v-model="status">
                             <option value ="Not Started">Not Started</option>
                             <option value = "In Progress">In-Progress</option>
                             <option value = "Complete">Complete</option>
@@ -57,7 +57,7 @@ const searchTerm = ref('')
                     <label for="search-bar" style="text-align: end; position: relative; left: -30px;">Search</label>
                     <div class="search-project">
                         <input id="search-bar" v-model="searchTerm" @input="arrayToDisplay = store.searchByName(searchTerm)" type="search" placeholder="Enter Project Name">
-                        <i class="fa-solid fa-magnifying-glass" id="search"></i>
+                        <i class="fa-solid fa-magnifying-glass" id="search" aria-hidden="true"></i>
                     </div>
                 </form>
             </div>
@@ -76,38 +76,36 @@ const searchTerm = ref('')
 
 <style>
 .page-wrapper h1 {
-    font-size: 45px;
+    font-size: clamp(1.6rem, 4vw, 3rem);;
     padding-left: 30px;
 }
 .page-wrapper {
     background-color: white;
     padding: 20px;
     margin: 0px 70px 0px;
-    height: 80%;
-    width: 85%;
+    height: 70vh;
+    width: 90vw;
     border-radius: 3px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.22);
 }
 .projectlist-wrapper {
-    background: white;
-    padding: 20px 30px 25px;
-    margin-top: 0px;
+    padding: 1.2rem 2rem 1.5rem;
     border-radius: 5px;
 }
 h1{
     margin: 20px 0px 10px;
 }
 .project-view button:hover{
-    color:black ;
+    color:darkgrey ;
     background: transparent;
     text-decoration: underline;
 }
 .project-view button {
     border: transparent;
     background: transparent;
-    color: darkgrey;
+    color: black;
     padding: 0px 12px 0px;
-    font-size: 22px;
+    font-size: clamp(1rem, 2vw, 1.5rem);
 }
 .project-view {
     position: relative;
@@ -130,7 +128,7 @@ select {
 .status-filter {
     position: relative;
     top: 0px;
-    font-size: medium;
+    font-size: clamp(1rem, 2vw, 1.5rem);
 }
 .status-filter select:hover {
     cursor: pointer;
