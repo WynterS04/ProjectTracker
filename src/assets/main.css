@@ -10,23 +10,15 @@ tr {
 }
 
 th, td {
-    padding-right: 35px;
-}
-.color-circle {
-    width: 15px;
-    height: 15px;
-    margin-top: 8px;
-    border: 1px solid black;
-    border-radius: 50%;
+    padding-right: 2.3rem;
 }
 
 .nav-bar {
   background: #067DB7;
-  height: 13vh;
+  height: clamp(6rem, 3rem + 4vw , 10rem);
   width: 100%;
-  padding-bottom: 1.25rem;
   box-sizing: border-box;
-  margin: 0px 0px 40px;
+  margin-bottom: clamp(2.5rem, 2rem + 1vw, 3rem);
   -webkit-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
   -moz-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.57);
@@ -34,7 +26,7 @@ th, td {
 
 .nav-bar h1 {
     margin: 0;
-    padding: 30px 30px 0px;
+    padding: 2rem 2rem 0px;
     color: white;
     font-size: clamp(1.7rem, 4vw, 3rem);
 }

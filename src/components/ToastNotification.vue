@@ -21,14 +21,14 @@ const closeToast = () => {
         <!--New project added-->
         <div data-test="toast-notif" class="toast-content">
             <div class="toast-icon">
-                <i id="check" class="fas fa-check-circle" style="color: rgb(116, 192, 252);"></i>
+                <i id="check" class="fas fa-check-circle"></i>
             </div>
             <div class="toast-text">
                 <h3>Success</h3>
                 <p>{{ notifs.message }}</p>
             </div>
             <div class="toast-close">
-                <i class="fas fa-times" style="color: rgba(99, 98, 98, 0.416);" @click="closeToast"></i>
+                <i id="close" class="fas fa-times" @click="closeToast"></i>
             </div>
         </div>
     </div>
@@ -73,6 +73,15 @@ const closeToast = () => {
     margin-bottom: 5px;
     font-size: large;
     color: #3d3d3d;
+}
+#check {
+    color: rgb(116, 192, 252);
+}
+#close {
+    color: rgba(32, 32, 32, 0.416);
+}
+#close:hover {
+    color: rgba(99, 98, 98, 0.416);
 }
 .toast-close {
     font-size: larger;

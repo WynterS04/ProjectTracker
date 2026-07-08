@@ -54,10 +54,9 @@ const searchTerm = ref('')
 
                 <!-- Search -->
                 <form>
-                    <label for="search-bar" style="text-align: end; position: relative; left: -30px;">Search</label>
+                    <label class="search" for="search-bar">Search</label>
                     <div class="search-project">
                         <input id="search-bar" v-model="searchTerm" @input="arrayToDisplay = store.searchByName(searchTerm)" type="search" placeholder="Enter Project Name">
-                        <i class="fa-solid fa-magnifying-glass" id="search" aria-hidden="true"></i>
                     </div>
                 </form>
             </div>
@@ -76,45 +75,50 @@ const searchTerm = ref('')
 
 <style>
 .page-wrapper h1 {
-    font-size: clamp(1.6rem, 4vw, 3rem);;
-    padding-left: 30px;
+    font-size: clamp(2rem, 4vw, 3rem);;
+    padding-left: clamp(0.8rem, 1rem, 2rem);
 }
 .page-wrapper {
     background-color: white;
-    padding: 20px;
-    margin: 0px 70px 0px;
-    height: 70vh;
+    padding: clamp(1rem,  2rem, 1.5rem);
+    margin: 0 auto;
+    height: clamp(40vh, 2rem+2vh,70vh);
     width: 90vw;
     border-radius: 3px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.22);
 }
 .projectlist-wrapper {
-    padding: 1.2rem 2rem 1.5rem;
+    padding: clamp(0.8rem, 1rem ,1.5rem)
+             clamp(0.5, 1rem, 2rem);
     border-radius: 5px;
 }
 h1{
-    margin: 20px 0px 10px;
+    margin: 1.2rem 0px 0.6rem;
 }
 .project-view button:hover{
     color:darkgrey ;
     background: transparent;
-    text-decoration: underline;
 }
 .project-view button {
     border: transparent;
     background: transparent;
     color: black;
-    padding: 0px 12px 0px;
+    padding: 0px 
+             clamp(0.8rem, 1rem, 1rem)
+             0px;
     font-size: clamp(1rem, 2vw, 1.5rem);
+    font-family: 'Times New Roman', Times, serif;
 }
 .project-view {
     position: relative;
-    top: 40px;
+    top: clamp(1rem, 3vw, 2.5rem);
 }
 .top-bar {
     display: flex;
     flex-direction: row;
-    padding: 10px 20px 0px;
+    padding: clamp(0.4rem, 0.2rem + 1vw, 0.6rem)
+             clamp(0.8rem, 0.2rem + 1vw, 1.3rem)
+             clamp(0.2rem, 0.2rem + 2vw, 0.5rem);
     justify-content: space-between;
 }
 .user-actions {
@@ -125,25 +129,16 @@ select {
     border-radius: 0px;
     width:50% ;
 }
-.status-filter {
-    position: relative;
-    top: 0px;
+.status-filter label {
     font-size: clamp(1rem, 2vw, 1.5rem);
 }
 .status-filter select:hover {
     cursor: pointer;
 }
-.search-project {
-    display:flex;
-    flex-direction: row;
+.search {
+    font-size: clamp(1rem, 2vw, 1.5rem);
 }
-.search-bar:focus {
-    position: relative;
-    z-index: 3;
-}
-#search {
-    position: relative;
-    left: -95px;
-    top: 19px;
+.search-bar {
+    width: 20%;
 }
 </style>
