@@ -1,19 +1,17 @@
 import './assets/main.css'
+import 'floating-vue/dist/style.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import FloatingVue from 'floating-vue'
 
 import App from './App.vue'
 import router from './router'
 
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-
-const vuetify = createVuetify()
 const app = createApp(App)
 
 app.use(createPinia())
-app.use(vuetify)
 app.use(router)
+app.use(FloatingVue)
 
 app.mount('#app')

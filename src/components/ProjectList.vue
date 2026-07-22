@@ -6,6 +6,8 @@ import type { ProjectStatus } from '@/stores/ProjectStore'
 import ProjectForm from '@/components/ProjectForm.vue'
 import Sorting from './Sorting.vue'
 import ToastNotification from './ToastNotification.vue'
+import { hover } from '@testing-library/user-event/dist/cjs/convenience/hover.js'
+import { hideAllPoppers } from 'floating-vue'
 
 const store = useProjectStore()
 const props = defineProps<{
@@ -13,7 +15,7 @@ const props = defineProps<{
 }>()
 
 const headers = [
-    {key: 'id', label:'Id'},
+    {key: 'id', label: 'Id'},
     {key: 'project', label: 'Name'},
     {key: 'owner', label:'Owner'},
     {key: 'date', label:'Date'},
@@ -21,7 +23,8 @@ const headers = [
     {key: 'description', label:'Description'}
 ] satisfies {key: keyof Project; label: string}[]
 
-const status = ref<ProjectStatus>('Not Started')
+const hoveredRow = ref()
+const menuOpen = ref()
 
 /* Delete Modal */
 const showDeleteModal = ref(false)
@@ -104,7 +107,6 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
         return direction === 'asc' ? Number(aValue) - Number(bValue): Number(bValue) - Number(aValue)
     })
 }
-
 </script>
 
 <template>
@@ -130,44 +132,50 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
                 v-for="(row, index) in props.project"
                 :key="index"
                 :class="{overdue: isOverdue(row.date, row.status)}"
+                @mouseenter="hoveredRow = row.id"
+                @mouseleave="hoveredRow = null"
                 >
                     <td class="id-column">{{ row.id }}</td>
                     <td>{{ row.project }}</td>
                     <td>{{ row.owner }}</td>
                     <td data-test="date">{{ row.date }}</td>
                     <td>{{ row.status }}</td>
-                    <td colspan="2">{{ row.description }}</td>
+                    <td>{{ row.description }}</td>
 
-                    <div class="icons">
-                    <!--confirm & delete project-->
-                    <div class="trash">
-                        <button class="trash-button" type="button" aria-label="Delete" @click="openDeleteModal(row)">
-                            <i id="trash-icon" data-test="delete-icon" class="fas fa-trash fa-lg" aria-hidden="true"></i>
-                        </button>
-                        <div v-if="showDeleteModal" class="modal-backdrop">
-                            <div data-test="delete-modal" class="modal">
-                                <h3>Delete Confirmation</h3>
-                                <p>Are you sure you want to remove the "<strong>{{ selectedProject?.project }}</strong>" project?</p>
+                    <td class="actions">
+                    <!--action menu-->
+                        <VDropdown placement="right" :distance="10">
+                            <button
+                            v-show="hoveredRow === row.id || menuOpen === row.id"
+                            class="action-button"
+                            @click="showEditModal = false, showDeleteModal = false"
+                            >
+                                ...
+                            </button>
 
-                                <div class="modal-actions">
-                                    <button data-test="cancel-button" @click="closeDeleteModal">Cancel</button>
-                                    <button data-test="delete-button" class="danger" @click="selectedProject && confirmDelete(selectedProject.id)">Delete</button>
+                            <template #popper>
+                                <div class="action-menu" @mouseenter="menuOpen = row.id" @mouseleave="menuOpen = null">
+                                    <!--Edit button-->
+                                    <button class="edit-button" type="button" aria-label="Edit" @click="openEditModal(row), hideAllPoppers()">
+                                    <i data-test="edit-icon" class="fa-solid fa-pen-to-square fa-lg" aria-hidden="true"></i>
+                                    Edit
+                                    </button>
+
+                                    <!--Delete button-->
+                                    <button class="trash-button" type="button" aria-label="Delete" @click="openDeleteModal(row), hideAllPoppers()">
+                                        <i data-test="delete-icon" class="fas fa-trash fa-lg" aria-hidden="true"></i>
+                                        Delete
+                                    </button>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--edit project-->
-                    <div class="edit">
-                        <button class="edit-button" type="button" aria-label="Edit" @click="openEditModal(row)">
-                        <i data-test="edit-icon" class="fa-solid fa-pen-to-square fa-lg" id="edit-icon" aria-hidden="true"></i>
-                        </button>
+                            </template>
+                        </VDropdown>
+                        <!--Edit Modal-->
                         <div v-if="showEditModal" class="modal-backdrop">
                             <div data-test="edit-modal" class="project-form-container">
                                 <div class="modal-header">
-                                <h1>Edit Project</h1>
+                                    <h1>Edit Project</h1>
                                     <button class="close-button" type="button" aria-label="close" @click="showEditModal=false">
-                                        <i data-test="cancel-button" class="fas fa-xmark" id="close-icon" aria-hidden="true"></i>
+                                         <i data-test="cancel-button" class="fas fa-xmark" id="close-icon" aria-hidden="true"></i>
                                     </button>
                                 </div>
 
@@ -176,9 +184,20 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    </div>
+                        <!--Delete Modal-->
+                        <div v-if="showDeleteModal" class="modal-backdrop">
+                            <div data-test="delete-modal" class="modal">
+                                <h3>Delete Confirmation</h3>
+                                <p>Are you sure you want to remove the "<strong>{{ selectedProject?.project }}</strong>" project?</p>
+
+                                <div class="delete-actions">
+                                    <button data-test="cancel-button" @click="closeDeleteModal">Cancel</button>
+                                    <button data-test="delete-button" class="danger" @click="selectedProject && confirmDelete(selectedProject.id)">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -214,17 +233,16 @@ function handleSort (field: keyof Project, direction: 'asc' | 'desc') {
 </template>
 
 <style>
-.modal-header h1 {
-    font-size: 48px;
-    padding: 0px 50px 10px;
-}
 .no-projects {
     font-size: larger;
+    margin: 1.5% auto;
+    padding-left: 3%;
 }
 table {
     border-collapse: collapse;
-    width: 79vw;
-    margin: 1% 3.5%;
+    width: 90%;
+    height: 30%;
+    margin: 1.5% auto;
 }
 .table-header {
     display: flex;
@@ -248,7 +266,15 @@ th, td {
     background-color: #fca6a5a2;
 }
 td {
-    padding: 0.8rem 0.9rem;
+    padding: 1rem 0.9rem;
+}
+.actions{
+    background-color: white!important;
+    border: none;
+}
+td.actions{
+    width: 3%;
+    padding: 0.5rem 0.5rem;
 }
 label {
     font-size: 1.5rem;
@@ -257,29 +283,58 @@ label {
     text-align: center;
     padding: 0px !important;
 }
-.trash-button {
-    margin: 17px 18px 17px;
-    padding: 0px;
+.action-button {
     background-color: transparent;
     border: none;
+    font-size: clamp(0.8rem, 2vw, 1.2rem);
+    margin-bottom: 0.2rem;
+    padding-bottom:0.5rem;
+}
+.action-button:hover{
+    background-color: lightgray;
+}
+.action-menu{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 1.1rem 0.6rem;
+    gap: 1.3rem;
+}
+.action-menu button {
+    background-color: transparent;
+    border: none;
+}
+.action-menu i{
+    padding-right: 0.3rem;
+}
+.modal {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 6px;
+  width: 25rem;
+  line-height: 28px;
 }
 .trash-button:hover{
     background-color: transparent;
-}
-#trash-icon:hover {
     color: rgb(243, 44, 31);
-}
-.edit-button {
-    margin: 17px 18px 17px;
-    padding: 0px;
-    background-color: transparent;
-    border: none;
 }
 .edit-button:hover{
     background-color: transparent;
+    color: #00A86B;
 }
-#edit-icon:hover {
-    color: #00A86B
+.modal-header h1 {
+    font-size: clamp(0.5rem, 2vw+2rem, 2.8rem);
+    padding: 0px
+             clamp(1rem, 2vw, 3rem)
+             clamp(0.3rem, 1vw, 0.6rem);
+}
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: clamp(0.8rem, 2vw, 1.3rem)
+            clamp(0.8rem, 2vw, 1.3rem)
+            clamp(1rem, 2vw, 1.5rem);
 }
 .modal-backdrop {
   position: fixed;
@@ -289,23 +344,13 @@ label {
   align-items: center;
   justify-content: center;
 }
-.modal-header {
-    margin: 20px 0px 25px;
-}
-.modal {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 6px;
-  width: 400px;
-  line-height: 28px;
-}
-.modal-actions {
+.delete-actions {
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
 }
-.modal-actions button {
-    padding: 5px;
+.delete-actions button {
+    padding: 0.3rem;
     border-radius: 8px;
     font-size: large;
     border: 1px solid black;
@@ -338,7 +383,7 @@ button.danger {
 }
 #add {
     font-size: clamp( 0.5rem, 2vw, 1.3rem);
-    margin: 1.5rem 0.8rem;
+    margin: clamp(0.8rem, 2rem, 1.5rem) 0.8rem;
 }
 .add-project-button:hover  {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -349,10 +394,9 @@ button.danger {
 }
 .project-form-container {
     background: white;
-    padding: 30px;
-    margin: 50px;
-    width: 40%;
-    height: 85%;
+    padding: 1.8rem;
+    width: 35vw;
+    height: 85vh;
     border-radius: 12px;
     box-shadow: 3px 3px 4px 3px rgba(0,0,0,0.25);
 
@@ -365,11 +409,11 @@ button.danger {
     justify-content: space-between;
 }
 .close-button {
-    position: relative;
-    left: -70px;
-    top: 40px;
     background-color: transparent;
     border: none;
+    margin: clamp(1.5rem, 2vw, 2.5rem)
+            clamp(1.3rem, 2vw, 2rem)
+            0px;
 }
 .close-button:hover{
     background-color: transparent;
