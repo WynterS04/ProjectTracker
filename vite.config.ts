@@ -14,6 +14,7 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  base: '/ProjectTracker/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
